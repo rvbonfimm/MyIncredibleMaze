@@ -6,58 +6,31 @@ public class Maze {
 
     private int x;
     private int y;
+    private int barrier_percentage;
+    private String method_chosen;
     private int[][] begin;
     private int[][] end;
     private int[][] maze_map;
 
     public Maze() {
-
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int[][] getBegin() {
-        return begin;
-    }
-
-    public int[][] getEnd() {
-        return end;
-    }
-
-    public void setX(Integer x) {
+    public Maze(int x, int y, String method_chosen, int barrier_percentage) {
         this.x = x;
-    }
-
-    public void setY(Integer y) {
         this.y = y;
+        this.method_chosen = method_chosen;
+        this.barrier_percentage = barrier_percentage;
     }
 
-    public void setBegin(int[][] begin) {
-        this.begin = begin;
-    }
-
-    public void setEnd(int[][] end) {
-        this.end = end;
-    }
-
-    public boolean createMaze(int x, int y) {
+    public boolean createMaze() {
         Random r = new Random();
 
         int random_begin = r.nextInt(x) + 1;
         int random_end = r.nextInt(y) + 1;
-
         System.out.println("Begin random (X): " + random_begin);
         System.out.println("End random (Y): " + random_end);
 
-        System.out.println("----------------");
-
-        // specify the Begin and And of the Maze
+        // specify the Begin and End of the Maze
         int b[][] = new int[random_begin][0];
         int e[][] = new int[0][random_end];
 
@@ -66,8 +39,6 @@ public class Maze {
 
         System.out.println("Maze length (X): " + maze_map.length);
         System.out.println("Maze length (Y): " + maze_map[0].length);
-
-        System.out.println("----------------");
 
         int counter = 0;
 
@@ -87,15 +58,8 @@ public class Maze {
         for (int line = 0; line < maze_map.length; line++) {
             System.out.println("Line: " + line);
             for (int column = 0; column < maze_map[0].length; column++) {
-
                 System.out.println("Maze values [" + line + "][" + column + "]: " + maze_map[line][column]);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Maze maze = new Maze();
-        boolean result = maze.createMaze(8, 8);
-        maze.showMaze();
     }
 }
