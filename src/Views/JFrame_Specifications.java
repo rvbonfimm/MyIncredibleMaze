@@ -238,9 +238,9 @@ public class JFrame_Specifications extends javax.swing.JFrame {
         System.out.println("Random number: " + barrier_percentage);
         System.out.println("Method chosen: " + method_chosen);
 
-        Maze m = new Maze(axis_y, axis_y, method_chosen, barrier_percentage);
+        Maze m = new Maze(axis_x, axis_y, method_chosen, barrier_percentage);
         m.createMaze();
-        m.showMaze();
+        //m.showMaze();
     }//GEN-LAST:event_jButton_Start_MazeActionPerformed
 
     private void jCheckBox_Barrier_PercentageItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox_Barrier_PercentageItemStateChanged
