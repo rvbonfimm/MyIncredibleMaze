@@ -228,7 +228,7 @@ public class JFrame_Specifications extends javax.swing.JFrame {
         } else {
             // Genarate a random number between 0 and 100 to Barrier percentage
             Random r = new Random();
-            barrier_percentage = r.nextInt(100);
+            barrier_percentage = r.nextInt(50);
         }
 
         String method_chosen = this.jComboBox_Methods.getSelectedItem().toString();
@@ -239,7 +239,7 @@ public class JFrame_Specifications extends javax.swing.JFrame {
         System.out.println("Method chosen: " + method_chosen);
 
         Maze m = new Maze(axis_x, axis_y, method_chosen, barrier_percentage);
-        m.createMaze();
+        //m.createMaze();
         //m.showMaze();
     }//GEN-LAST:event_jButton_Start_MazeActionPerformed
 
