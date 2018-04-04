@@ -1,11 +1,11 @@
 package Classes;
 
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -33,7 +33,13 @@ public class Maze extends JFrame {
         this.barrier_percentage = barrier_percentage;
 
         add(createMaze());
-        setSize(x * 75, y * 65);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) screenSize.getWidth();
+        int height = (int) screenSize.getHeight();
+
+        setSize(width, height);
+
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -78,11 +84,11 @@ public class Maze extends JFrame {
         }
 
         // Create the front end needs
-        JPanel painel = new JPanel();
-        painel.setBorder(BorderFactory.createTitledBorder("Labirinto"));
+        JPanel outer_painel = new JPanel();
 
-        JPanel p = new JPanel();
-        p.setLayout(new GridLayout(x, y));
+        JPanel maze_panel = new JPanel();
+        maze_panel.setLayout(new GridLayout(x, y));
+        //maze_panel.setBorder(BorderFactory.createTitledBorder("Labirinto"));
 
         int counter = 0;
 
@@ -97,40 +103,43 @@ public class Maze extends JFrame {
                 ImageIcon icon = null;
 
                 if (blocked_fields_manager.contains(maze_map[i][j])) {
-                    System.out.println("Found blocked field: " + maze_map[i][j]);
+                    Classes.Debugger.debug(0, "Found blocked field: " + maze_map[i][j]);
                     icon = new ImageIcon("C:\\Users\\roger\\Documents\\NetBeansProjects\\Maze\\src\\Static\\Fire_Field.png");
                 } else {
                     icon = new ImageIcon("C:\\Users\\roger\\Documents\\NetBeansProjects\\Maze\\src\\Static\\Floor_Field.png");
                 }
 
                 label.setIcon(icon);
-                p.add(label);
+                maze_panel.add(label);
 
                 counter++;
             }
         }
 
-        int preferred_size_axis_x = x * 40;
-        int preferred_size_axis_y = y * 40;
+        int preferred_size_axis_x = x * 37;
+        int preferred_size_axis_y = y * 37;
 
-        // Define um tamanho do scrollpane
+        // Define o tamanho do scrollpane
         jsp.setPreferredSize(new Dimension(preferred_size_axis_x, preferred_size_axis_y));
 
-        // Define o painel de checkboxes como viewport do scrollpane
-        jsp.setViewportView(p);
-        painel.add(jsp);
+        setLayout(new GridBagLayout());
 
-        System.out.println("Maze length (X): " + maze_map.length);
-        System.out.println("Maze length (Y): " + maze_map[0].length);
-        System.out.println("Begin random (X): " + random_begin);
-        System.out.println("End random (Y): " + random_end);
-        System.out.println("Grid (X): " + x);
-        System.out.println("Grid (Y): " + y);
-        System.out.println("Maze itens quantity: " + maze_itens_quantity);
-        System.out.println("Fire fieds quantity: " + quantity_blocked_fields);
-        System.out.println("Blocked fields quantity: " + blocked_fields_manager.size());
-        System.out.println("Preferred size (X): " + preferred_size_axis_x);
-        System.out.println("Preferred size (Y): " + preferred_size_axis_y);
-        return painel;
+        jsp.setViewportView(maze_panel);
+        outer_painel.add(jsp);
+
+        Classes.Debugger.debug(0, "Maze length (X): " + maze_map.length);
+        Classes.Debugger.debug(0, "Maze length (Y): " + maze_map[0].length);
+        Classes.Debugger.debug(0, "Begin random (X): " + random_begin);
+        Classes.Debugger.debug(0, "End random (Y): " + random_end);
+        Classes.Debugger.debug(0, "Grid (X): " + x);
+        Classes.Debugger.debug(0, "Grid (Y): " + y);
+        Classes.Debugger.debug(0, "Maze itens quantity: " + maze_itens_quantity);
+        Classes.Debugger.debug(0, "Fire fieds quantity: " + quantity_blocked_fields);
+        Classes.Debugger.debug(0, "Blocked fields quantity: " + blocked_fields_manager.size());
+        Classes.Debugger.debug(0, "Maze length (Y): " + maze_map[0].length);
+        Classes.Debugger.debug(0, "Preferred size (Y): " + preferred_size_axis_y);
+        Classes.Debugger.debug(0, "----------------------------------- END -------------------------");
+
+        return outer_painel;
     }
 }

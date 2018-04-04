@@ -7,11 +7,8 @@ package Views;
 
 import Classes.Maze;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author roger
- */
 public class JFrame_Specifications extends javax.swing.JFrame {
 
     /**
@@ -35,9 +32,7 @@ public class JFrame_Specifications extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jTextField_Axis_X = new javax.swing.JTextField();
-        jTextField_Axis_Y = new javax.swing.JTextField();
         jTextField_Barrier_Fields_Percentage = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jCheckBox_Barrier_Percentage = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
@@ -59,16 +54,12 @@ public class JFrame_Specifications extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jLabel4.setText("Dimensões:");
+        jLabel4.setText("Dimensão:");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         jLabel5.setText("Barreira (%):");
 
         jTextField_Barrier_Fields_Percentage.setEditable(false);
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel6.setText("X");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         jLabel1.setForeground(java.awt.Color.red);
@@ -93,38 +84,32 @@ public class JFrame_Specifications extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addGap(2, 2, 2)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox_Barrier_Percentage)
-                    .addComponent(jTextField_Axis_X, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jTextField_Barrier_Fields_Percentage))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                        .addComponent(jTextField_Axis_Y, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(34, 34, 34))
+                        .addComponent(jCheckBox_Barrier_Percentage)))
+                .addGap(8, 8, 8)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField_Barrier_Fields_Percentage, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                    .addComponent(jTextField_Axis_X))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField_Axis_X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_Axis_Y, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField_Barrier_Fields_Percentage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jCheckBox_Barrier_Percentage)
-                    .addComponent(jLabel5))
-                .addContainerGap(28, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jTextField_Axis_X, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField_Barrier_Fields_Percentage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -146,7 +131,7 @@ public class JFrame_Specifications extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(103, 103, 103)
-                .addComponent(jButton_Start_Maze, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton_Start_Maze, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
                 .addGap(98, 98, 98))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -179,20 +164,22 @@ public class JFrame_Specifications extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel2)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(55, 55, 55)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -218,29 +205,45 @@ public class JFrame_Specifications extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton_Start_MazeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Start_MazeActionPerformed
-        int axis_x = Integer.parseInt(this.jTextField_Axis_X.getText());
-        int axis_y = Integer.parseInt(this.jTextField_Axis_Y.getText());
+
+        int axis_x = 0;
+
+        if (!this.jTextField_Axis_X.getText().isEmpty()) {
+
+            if (!this.jTextField_Axis_X.getText().matches("[0-9]+")) {
+                JOptionPane.showMessageDialog(null, "Só é permitido números para o primeiro campo.", "Valor não permitido", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            axis_x = Integer.parseInt(this.jTextField_Axis_X.getText());
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Você esqueceu de digitar o valor de entrada.", "Valor não encontrado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!(axis_x > 2 && axis_x < 19)) {
+            JOptionPane.showMessageDialog(null, "Só é permitido números acima de 2 e menores que 19 para as posições X e Y da matriz.", "Construção do Labirinto", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         int barrier_percentage;
 
         if (!this.jTextField_Barrier_Fields_Percentage.getText().equals("")) {
             barrier_percentage = Integer.parseInt(this.jTextField_Barrier_Fields_Percentage.getText());
         } else {
-            // Genarate a random number between 0 and 100 to Barrier percentage
+            // Genarate a random number between 0 to 25
             Random r = new Random();
-            barrier_percentage = r.nextInt(50);
+            barrier_percentage = r.nextInt(25);
         }
 
         String method_chosen = this.jComboBox_Methods.getSelectedItem().toString();
 
-        System.out.println("Axis X: " + axis_x);
-        System.out.println("Axis Y: " + axis_y);
-        System.out.println("Random number: " + barrier_percentage);
-        System.out.println("Method chosen: " + method_chosen);
+        Classes.Debugger.debug(0, "Axis X: " + axis_x);
+        Classes.Debugger.debug(0, "Random number: " + barrier_percentage);
+        Classes.Debugger.debug(0, "Method chosen: " + method_chosen);
 
-        Maze m = new Maze(axis_x, axis_y, method_chosen, barrier_percentage);
-        //m.createMaze();
-        //m.showMaze();
+        Maze new_maze = new Maze(axis_x, axis_x, method_chosen, barrier_percentage);
     }//GEN-LAST:event_jButton_Start_MazeActionPerformed
 
     private void jCheckBox_Barrier_PercentageItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox_Barrier_PercentageItemStateChanged
@@ -262,12 +265,10 @@ public class JFrame_Specifications extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField jTextField_Axis_X;
-    private javax.swing.JTextField jTextField_Axis_Y;
     private javax.swing.JTextField jTextField_Barrier_Fields_Percentage;
     // End of variables declaration//GEN-END:variables
 }
