@@ -88,7 +88,7 @@ public class Board {
     }
     
     public static void main(String[] args){
-        Board board = new Board((byte)10);
+        Board board = new Board((byte)5);
         board.set((byte)2,(byte)0, BLOCKED);
         Search s = new Bfs();
         Path p = s.run(board);
