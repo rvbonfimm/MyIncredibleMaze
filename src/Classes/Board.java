@@ -5,6 +5,8 @@
  */
 package Classes;
 
+import java.util.HashSet;
+
 /**
  *
  * @author EngComp
@@ -56,8 +58,6 @@ public class Board {
             _board[t.getPos().getRow()][t.getPos().getColumn()] = Board.PATH;
             t = t.getParent();
         }
-
-        //TODO:
         return;
     }
 
@@ -73,8 +73,6 @@ public class Board {
         return _end;
     }
     
-    
-    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -88,15 +86,25 @@ public class Board {
     }
     
     public static void main(String[] args){
-        Board board = new Board((byte)5);
+
+        Board board = new Board((byte)20);
+        for(int i = board.getSize() - 1; i > 1; i-- )
+            board.set((byte)2,(byte)i, BLOCKED);
+
         board.set((byte)2,(byte)0, BLOCKED);
         Search s = new Bfs();
-        Path p = s.run(board);
         
+        Path p = s.run(board);
         board.set(p);
         
         System.out.println(board);
         
-    }
-    
+        Position p1 = new Position((byte)1, (byte)1);
+        Position p2 = new Position((byte)1, (byte)1);
+        
+        HashSet<Position> hs = new HashSet<>();
+        hs.add(p1);
+        System.out.println("" + hs.contains(p2));
+        
+    }   
 }
