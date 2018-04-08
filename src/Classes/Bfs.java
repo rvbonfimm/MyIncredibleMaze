@@ -5,13 +5,10 @@
  */
 package Classes;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
-import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.PriorityQueue;
+
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  *
@@ -19,10 +16,10 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class Bfs extends Search{
 
-    private Queue<Path> _queue;
+    private final Queue<Path> _queue;
     
     public Bfs() {
-        _queue = new LinkedList<Path>();
+        _queue = new LinkedList<>();
     }
     
     @Override
@@ -40,58 +37,73 @@ public class Bfs extends Search{
         _queue.add(path);
     }
 
-    private void put(Path path, Map<Position, Boolean> memo, Position pos) {
-            memo.put(pos, Boolean.TRUE);
+    @Override
+    public Path element() {
+        return _queue.element();
+    }
+
+    private void put(Path path, HashSet<Position> memo, Position pos) {
+            memo.add(pos);
             add(new Path(pos, path));
     }
     
-    private boolean isBlocked(Board board, byte r, byte c) {
-        return board.get(r, c) == Board.BLOCKED;
+    private boolean isBlocked(Board board, Position pos) {
+        return board.get(pos.getRow(), pos.getColumn()) == Board.BLOCKED;
     }
-    
-    
-    
-    @Override
-    public boolean readNode(
-                                Path path,
-                                Board board, 
-                                Map<Position, Boolean> memo, 
-                                Position pos
-                            ) 
-    {
-        byte row, col;
-        row = pos.getRow();
-        col = pos.getColumn();
+
+    public boolean readUp(Position pos, Path path, Board board, HashSet<Position> memo){
+        if( pos.up().getRow() < board.getSize() 
+                    && !memo.contains(pos.up())
+                    && !isBlocked(board, pos.up())) {
         
-        if( (byte)(row + 1) < board.getSize() 
-                    && memo.get(new Position((byte)(row + 1), col)) == null
-                    && !isBlocked(board, (byte)(row + 1), col))
-            put(path, memo, new Position((byte)(row + 1), col));
-        
-        if( (byte)(row - 1) > -1 
-                    && memo.get(new Position((byte)(row - 1), col)) == null 
-                    && !isBlocked(board, (byte)(row - 1), col))
-            put(path, memo, new Position((byte)(row -1), col));
-    
-        if( (byte)(col + 1) < board.getSize() 
-                    && memo.get(new Position(row, (byte)(col + 1))) == null 
-                    && !isBlocked(board, row, (byte)(col + 1)))
-            put(path, memo, new Position(row, (byte)(col + 1)));
-        
-        if( (byte)(col - 1) > -1 
-                    && memo.get(new Position(row, (byte)(col - 1))) == null 
-                    && !isBlocked(board, row, (byte)(col - 1)))
-            put(path, memo, new Position(row, (byte)(col - 1)));
-           
-        Path ver = _queue.element();
-        if(ver.getPos().getRow() == board.getEnd().getRow() 
-                && ver.getPos().getColumn() == board.getEnd().getColumn())
-            return false;
-        if(memo.size() == board.getSize() * board.getSize())
+            put(path, memo, pos.up());
             return true;
-        //System.out.println("" + ver.getPos().getRow() + " " + ver.getPos().getColumn());
+        }
         return true;
     }
+    public boolean readDown(Position pos, Path path, Board board, HashSet<Position> memo) {
+        if( pos.down().getRow() > -1 
+                    && !memo.contains(pos.down())
+                    && !isBlocked(board, pos.down())) {
+         
+            put(path, memo, pos.down());
+            return true;
+
+        }
+        return false;
+    }
+    public boolean readRight(Position pos, Path path, Board board, HashSet<Position> memo) {
+        if( pos.right().getColumn() < board.getSize() 
+                    && !memo.contains(pos.right())
+                    && !isBlocked(board, pos.right())) {
+            put(path, memo, pos.right());
+            return true;
+        }
+        return false;
+    }
+    public boolean readLeft(Position pos, Path path, Board board, HashSet<Position> memo) {
+        if( pos.left().getColumn() > -1 
+                    && !memo.contains(pos.left() )
+                    && !isBlocked(board, pos.left())) {
+            
+            put(path, memo, pos.left());
+            return true;
+        }   
+        return false;
+    }
     
+    @Override
+    public void readNode(
+                                Path path,
+                                Board board, 
+                                HashSet<Position> memo, 
+                                Position pos
+                        ) 
+    {
+        readLeft(pos, path, board, memo);
+        readRight(pos, path, board, memo);
+        readDown(pos, path, board, memo);
+        readUp(pos, path, board, memo);
+    }
     
 }
