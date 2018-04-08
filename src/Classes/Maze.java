@@ -46,7 +46,6 @@ public class Maze extends JFrame {
     }
 
     private JComponent createMaze() {
-
         // Create the backend needs
         int maze_itens_quantity = x * y;
 
@@ -64,7 +63,11 @@ public class Maze extends JFrame {
 
         // Set the blocked fields quantity
         int quantity_blocked_fields = (barrier_percentage * maze_itens_quantity) / 100;
-
+        Board board = new Board((byte)x, (byte)quantity_blocked_fields);
+        Search search = new Bfs();
+        board.set(search.run(board));
+        
+        /*
         ArrayList<Integer> blocked_fields_manager = new ArrayList<>();
 
         Random field_position = new Random();
@@ -82,7 +85,7 @@ public class Maze extends JFrame {
 
             blocked_fields_manager.add(aux_random_number);
         }
-
+        */
         // Create the front end needs
         JPanel outer_painel = new JPanel();
 
@@ -102,11 +105,14 @@ public class Maze extends JFrame {
                 JLabel label = new JLabel();
                 ImageIcon icon = null;
 
-                if (blocked_fields_manager.contains(maze_map[i][j])) {
-                    Classes.Debugger.debug(0, "Found blocked field: " + maze_map[i][j]);
-                    icon = new ImageIcon("C:\\Users\\roger\\Documents\\NetBeansProjects\\Maze\\src\\Static\\Fire_Field.png");
-                } else {
-                    icon = new ImageIcon("C:\\Users\\roger\\Documents\\NetBeansProjects\\Maze\\src\\Static\\Floor_Field.png");
+                switch(board.get((byte)i, (byte)j)) {
+                    case Board.BLOCKED: 
+                        Classes.Debugger.debug(0, "Found blocked field: " + maze_map[i][j]);
+                         icon = new ImageIcon("Assets/Fire_Field.png"); break;
+                    case Board.EMPTY:
+                        icon = new ImageIcon("Assets/Floor_Field.png"); break;
+                    default:
+                        icon = new ImageIcon("");
                 }
 
                 label.setIcon(icon);
@@ -135,7 +141,7 @@ public class Maze extends JFrame {
         Classes.Debugger.debug(0, "Grid (Y): " + y);
         Classes.Debugger.debug(0, "Maze itens quantity: " + maze_itens_quantity);
         Classes.Debugger.debug(0, "Fire fieds quantity: " + quantity_blocked_fields);
-        Classes.Debugger.debug(0, "Blocked fields quantity: " + blocked_fields_manager.size());
+        //Classes.Debugger.debug(0, "Blocked fields quantity: " + blocked_fields_manager.size());
         Classes.Debugger.debug(0, "Maze length (Y): " + maze_map[0].length);
         Classes.Debugger.debug(0, "Preferred size (Y): " + preferred_size_axis_y);
         Classes.Debugger.debug(0, "----------------------------------- END -------------------------");

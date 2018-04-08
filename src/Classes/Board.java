@@ -5,6 +5,9 @@
  */
 package Classes;
 
+import java.util.HashSet;
+import java.util.Random;
+
 /**
  *
  * @author EngComp
@@ -16,6 +19,8 @@ public class Board {
     public static final char END     =    'E';
     public static final char BLOCKED =    '#';
     public static final char PATH    =    'x';
+    
+    
     private final byte _size;
     private Classes.Position _begin;
     private Classes.Position _end;
@@ -41,6 +46,31 @@ public class Board {
     
     }
     
+    public Board(byte size, byte barrier_percentage) {
+        this(size);
+        
+        int quantity_blocked_fields = (barrier_percentage * (size * size)) / 100;
+        int aux_random_number_x = 0;
+        int aux_random_number_y = 0;
+        
+        // Generate the random numbers to set the blocked fields
+        Random field_position = new Random();
+        for (int i = 0; i < quantity_blocked_fields; i++) {
+            aux_random_number_x = field_position.nextInt(size);
+            aux_random_number_y = field_position.nextInt(size);
+            
+            // Check if the random value was already inserted
+            while (_board[aux_random_number_x][aux_random_number_y] != EMPTY) {
+                aux_random_number_x = field_position.nextInt(size);
+                aux_random_number_y = field_position.nextInt(size);
+            
+            }
+            
+            _board[aux_random_number_x][aux_random_number_y] = BLOCKED;
+        }
+        
+    }
+    
     public char get(byte r, byte c) {
         return _board[r][c];
     }
@@ -56,8 +86,6 @@ public class Board {
             _board[t.getPos().getRow()][t.getPos().getColumn()] = Board.PATH;
             t = t.getParent();
         }
-
-        //TODO:
         return;
     }
 
@@ -73,8 +101,6 @@ public class Board {
         return _end;
     }
     
-    
-    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -88,15 +114,22 @@ public class Board {
     }
     
     public static void main(String[] args){
-        Board board = new Board((byte)5);
-        board.set((byte)2,(byte)0, BLOCKED);
+
+        Board board = new Board((byte)20, (byte) 10);
+
         Search s = new Bfs();
-        Path p = s.run(board);
         
+        Path p = s.run(board);
         board.set(p);
         
         System.out.println(board);
         
-    }
-    
+        Position p1 = new Position((byte)1, (byte)1);
+        Position p2 = new Position((byte)1, (byte)1);
+        
+        HashSet<Position> hs = new HashSet<>();
+        hs.add(p1);
+        System.out.println("" + hs.contains(p2));
+        
+    }   
 }
