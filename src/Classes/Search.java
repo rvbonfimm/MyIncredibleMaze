@@ -5,15 +5,14 @@
  */
 package Classes;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 /**
  *
  * @author EngComp
  */
 public abstract class Search {
+
     public abstract boolean isEmpty();
     public abstract Path remove();
     public abstract void add(Path path);

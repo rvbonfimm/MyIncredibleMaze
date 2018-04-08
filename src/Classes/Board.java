@@ -6,6 +6,7 @@
 package Classes;
 
 import java.util.HashSet;
+import java.util.Random;
 
 /**
  *
@@ -18,6 +19,8 @@ public class Board {
     public static final char END     =    'E';
     public static final char BLOCKED =    '#';
     public static final char PATH    =    'x';
+    
+    
     private final byte _size;
     private Classes.Position _begin;
     private Classes.Position _end;
@@ -41,6 +44,31 @@ public class Board {
              }
          }
     
+    }
+    
+    public Board(byte size, byte barrier_percentage) {
+        this(size);
+        
+        int quantity_blocked_fields = (barrier_percentage * (size * size)) / 100;
+        int aux_random_number_x = 0;
+        int aux_random_number_y = 0;
+        
+        // Generate the random numbers to set the blocked fields
+        Random field_position = new Random();
+        for (int i = 0; i < quantity_blocked_fields; i++) {
+            aux_random_number_x = field_position.nextInt(size);
+            aux_random_number_y = field_position.nextInt(size);
+            
+            // Check if the random value was already inserted
+            while (_board[aux_random_number_x][aux_random_number_y] != EMPTY) {
+                aux_random_number_x = field_position.nextInt(size);
+                aux_random_number_y = field_position.nextInt(size);
+            
+            }
+            
+            _board[aux_random_number_x][aux_random_number_y] = BLOCKED;
+        }
+        
     }
     
     public char get(byte r, byte c) {
@@ -87,11 +115,8 @@ public class Board {
     
     public static void main(String[] args){
 
-        Board board = new Board((byte)20);
-        for(int i = board.getSize() - 1; i > 1; i-- )
-            board.set((byte)2,(byte)i, BLOCKED);
+        Board board = new Board((byte)20, (byte) 10);
 
-        board.set((byte)2,(byte)0, BLOCKED);
         Search s = new Bfs();
         
         Path p = s.run(board);
