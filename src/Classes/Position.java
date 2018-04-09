@@ -18,6 +18,24 @@ public class Position {
         this._column = col;
     }
 
+    public Position up(){
+        return new Position((byte)(_row + 1), _column);
+    }
+    
+    public Position down(){
+        return new Position((byte)(_row - 1), _column);
+    }
+    
+    public Position left(){
+        return new Position(_row, (byte)(_column - 1));
+    }
+    
+    
+    public Position right(){
+        return new Position(_row, (byte)(_column + 1));
+    }
+    
+    
     public byte getRow() {
         return _row;
     }
@@ -25,5 +43,31 @@ public class Position {
     public byte getColumn() {
         return _column;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Position other = (Position) obj;
+        if (this._row != other._row) {
+            return false;
+        }
+        if (this._column != other._column) {
+            return false;
+        }
+        return true;
+    }
+
     
+
 }

@@ -5,37 +5,45 @@
  */
 package Classes;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 
 /**
  *
  * @author EngComp
  */
 public abstract class Search {
+
     public abstract boolean isEmpty();
     public abstract Path remove();
     public abstract void add(Path path);
-    public abstract boolean readNode(   Path path,
+    public abstract Path element();
+    
+    
+    public boolean isTarget(Board board){
+        Path ver = element();
+        if(ver.getPos().getRow() == board.getEnd().getRow() 
+                && ver.getPos().getColumn() == board.getEnd().getColumn())
+            return true;
+        return false;
+    }
+    
+    public abstract void readNode   
+                                    (  
+                                        Path path,
                                         Board board, 
-                                        Map<Position, 
-                                        Boolean> memo, Position pos
+                                        HashSet<Position> memo, 
+                                        Position pos
                                     );
+                                    
     public Path run(Board board) {
-     
-        Map<Position, Boolean> memo = new HashMap<Position, Boolean>();
-        
-        
+        HashSet<Position> memo = new HashSet<>();
         
         add(new Path(board.getBegin(), null));
-        memo.put(board.getBegin(), true);
+        memo.add(board.getBegin());
         
-        while(isEmpty()) {
+        while(isEmpty() && !isTarget(board)) {
             Path p = remove();
-            
-            if(readNode(p, board, memo, p.getPos()) == false)
-                break;
-            
+            readNode(p, board, memo, p.getPos());
         }
         
         return remove();
