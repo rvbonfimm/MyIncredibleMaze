@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Classes;
 
+import java.awt.List;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -13,39 +10,71 @@ import java.util.HashSet;
  */
 public abstract class Search {
 
-    public abstract boolean isEmpty();
-    public abstract Path remove();
-    public abstract void add(Path path);
-    public abstract Path element();
+    private Board _board;
     
+    protected HashSet<Position> _memo;
     
-    public boolean isTarget(Board board){
-        Path ver = element();
-        if(ver.getPos().getRow() == board.getEnd().getRow() 
-                && ver.getPos().getColumn() == board.getEnd().getColumn())
-            return true;
-        return false;
+    public Search(Board board) {
+        this._board = board;
+        this._memo = new HashSet<>();
     }
     
-    public abstract void readNode   
-                                    (  
-                                        Path path,
-                                        Board board, 
-                                        HashSet<Position> memo, 
-                                        Position pos
-                                    );
-                                    
-    public Path run(Board board) {
-        HashSet<Position> memo = new HashSet<>();
+    public boolean isTarget(Position current) {
+        return current.equals(_board.getEnd());
+    }
+    
+    public abstract Path remove();
+    
+    private Position createPosition(int row, int col){
+        return new Position((byte)row, (byte)col);
+    }
+    
+    public ArrayList<Path> getNodes(Path path) {
+        byte r, c;
         
-        add(new Path(board.getBegin(), null));
-        memo.add(board.getBegin());
+        ArrayList<Path> ls = new ArrayList<Path>();
+        r = path.getPos().getRow();
+        c = path.getPos().getColumn();
         
-        while(isEmpty() && !isTarget(board)) {
-            Path p = remove();
-            readNode(p, board, memo, p.getPos());
+        if(path.getPos().getRow() - 1 >= 0)
+            ls.add(new Path(createPosition(r - 1, c), path));
+        if(path.getPos().getColumn() - 1 >= 0)
+            ls.add(new Path(createPosition(r, c - 1), path));
+        if(path.getPos().getRow() + 1 <= _board.getSize() - 1 )
+            ls.add(new Path(createPosition(r + 1, c), path));
+        if(path.getPos().getColumn() + 1 <= _board.getSize() - 1 )
+            ls.add(new Path(createPosition(r, c + 1), path));
+        
+        return ls;
+    }
+    
+    public abstract void add(Path path);
+    public abstract boolean isEmpty();
+    private boolean isBlocked(Position pos){
+        return _board.get(pos.getColumn(), pos.getRow()) == Board.BLOCKED;
+    }
+    public Path run() {
+        
+        Path current = new Path(_board.getBegin(), null);
+        _memo.add(current.getPos());
+        add(current);
+        
+        while(!isEmpty()) {
+            current = remove();
+            
+            ArrayList<Path> nodes = getNodes(current);
+            for(Path path : nodes) {
+                if(!_memo.contains(path.getPos()) && !isBlocked(path.getPos())) 
+                {
+                    _memo.add(path.getPos());
+                    add(path);
+                }
+            }
+            
+            if(isTarget(current.getPos()))
+                break;
         }
         
-        return remove();
+        return current;
     }
 }
