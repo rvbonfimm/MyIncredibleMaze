@@ -115,9 +115,9 @@ public class Board {
     
     public static void main(String[] args){
 
-        Board board = new Board((byte)20, (byte) 10);
+        Board board = new Board((byte)20, (byte) 3);
 
-        Search s = new Bfs();
+        Search s = new Dfs();
         
         Path p = s.run(board);
         board.set(p);

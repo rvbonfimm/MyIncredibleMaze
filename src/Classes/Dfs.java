@@ -3,7 +3,7 @@ package Classes;
 import java.util.HashSet;
 import java.util.Stack;
 
-public class Dfs extends Bfs{
+public class Dfs extends Search{
     
     private Stack<Path> _stack;
     
@@ -13,7 +13,7 @@ public class Dfs extends Bfs{
     
     @Override
     public boolean isEmpty() {
-        return _stack.size() > 0;
+        return _stack.isEmpty();
     }
 
     @Override
@@ -39,13 +39,16 @@ public class Dfs extends Bfs{
                                 Position pos
                             ) 
     {
-        if(readLeft(pos, path, board, memo))
-            return;
+        
+        int i = 0;
         if(readRight(pos, path, board, memo))
             return;
         if(readDown(pos, path, board, memo))
             return;
         if(readUp(pos, path, board, memo))
+            return;
+        
+        if(readLeft(pos, path, board, memo))
             return;
     }
   
