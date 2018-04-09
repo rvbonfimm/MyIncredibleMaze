@@ -48,8 +48,8 @@ public class Maze extends JFrame {
         int quantity_blocked_fields = (barrier_percentage * maze_itens_quantity) / 100;
 
         Board board = new Board((byte)x, (byte)quantity_blocked_fields);
-        Search search = new Bfs();
-        board.set(search.run(board));
+        Search search = new Bfs(board);
+        board.set(search.run());
         
         // Create the front end needs
         JPanel outer_painel = new JPanel();

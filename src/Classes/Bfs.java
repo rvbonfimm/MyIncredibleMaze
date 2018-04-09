@@ -5,6 +5,7 @@
  */
 package Classes;
 
+import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -16,15 +17,11 @@ import java.util.Queue;
  */
 public class Bfs extends Search{
 
-    private final Queue<Path> _queue;
+    private Queue<Path> _queue;
     
-    public Bfs() {
-        _queue = new LinkedList<>();
-    }
-    
-    @Override
-    public boolean isEmpty() {
-        return _queue.size() == 0;
+    public Bfs(Board board) {
+        super(board);
+        _queue = new LinkedList<Path>();
     }
 
     @Override
@@ -32,29 +29,16 @@ public class Bfs extends Search{
         return _queue.poll();
     }
 
+
     @Override
     public void add(Path path) {
         _queue.add(path);
     }
 
     @Override
-    public Path element() {
-        return _queue.element();
+    public boolean isEmpty() {
+        return _queue.size() == 0;
     }
-
     
-    @Override
-    public void readNode(
-                                Path path,
-                                Board board, 
-                                HashSet<Position> memo, 
-                                Position pos
-                        ) 
-    {
-        readLeft(pos, path, board, memo);
-        readRight(pos, path, board, memo);
-        readDown(pos, path, board, memo);
-        readUp(pos, path, board, memo);
-    }
     
 }

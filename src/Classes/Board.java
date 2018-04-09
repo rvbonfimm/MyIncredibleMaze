@@ -115,21 +115,16 @@ public class Board {
     
     public static void main(String[] args){
 
-        Board board = new Board((byte)20, (byte) 3);
+        Board board = new Board((byte)20, (byte) 10);
 
-        Search s = new Dfs();
+        Search s = new Dfs(board);
         
-        Path p = s.run(board);
+        Path p = s.run();
         board.set(p);
         
         System.out.println(board);
         
-        Position p1 = new Position((byte)1, (byte)1);
-        Position p2 = new Position((byte)1, (byte)1);
         
-        HashSet<Position> hs = new HashSet<>();
-        hs.add(p1);
-        System.out.println("" + hs.contains(p2));
         
     }   
 }
