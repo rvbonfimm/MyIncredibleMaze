@@ -23,13 +23,13 @@ public class Position {
     }
     
     public Position down(){
+        
         return new Position((byte)(_row - 1), _column);
     }
     
     public Position left(){
         return new Position(_row, (byte)(_column - 1));
     }
-    
     
     public Position right(){
         return new Position(_row, (byte)(_column + 1));
