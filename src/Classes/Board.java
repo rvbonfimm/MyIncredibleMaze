@@ -109,10 +109,10 @@ public class Board {
     
     public static void main(String[] args){
 
+        byte size = 30;
+        Board board = new Board(size, (byte) 10);
         
-        Board board = new Board((byte)127, (byte) 10);
-        
-        Search s = new Dfs(board, new Position((byte) 0, (byte) 0), new Position((byte) 126, (byte) 126));
+        Search s = new Bfs(board);
         
    
 
@@ -122,8 +122,8 @@ public class Board {
         {
             p = s.next();
             
-            //board.set(p.getRow(), p.getColumn(), PATH);
-           // System.out.println("" + board);
+          //  board.set(p.getRow(), p.getColumn(), PATH);
+          //  System.out.println("" + board);
             ct++;
         }
         while(!s.isTarget(p));
