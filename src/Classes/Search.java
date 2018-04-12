@@ -1,26 +1,38 @@
 package Classes;
 
-import java.awt.List;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/**
- *
- * @author EngComp
- */
+
 public abstract class Search {
 
     private Board _board;
+    private Path _current;
+    private Position _target;
+    private Position _begin;
     
-    protected HashSet<Position> _memo;
+    private HashSet<Position> _memo;
+    
+    public Search(Board board, Position begin, Position target) {
+        this._board = board;
+        this._begin = begin;
+        this._target = target;
+        this._memo = new HashSet<>();
+        this._current = new Path(_begin, null);
+     
+    }
     
     public Search(Board board) {
         this._board = board;
+        this._begin = board.getBegin();
+        this._target = board.getEnd();
         this._memo = new HashSet<>();
+        this._current = new Path(_begin, null);
     }
     
     public boolean isTarget(Position current) {
-        return current.equals(_board.getEnd());
+        return current.equals(this._target);
     }
     
     public abstract Path remove();
@@ -53,28 +65,39 @@ public abstract class Search {
     private boolean isBlocked(Position pos){
         return _board.get(pos.getColumn(), pos.getRow()) == Board.BLOCKED;
     }
+    
     public Path run() {
         
-        Path current = new Path(_board.getBegin(), null);
-        _memo.add(current.getPos());
-        add(current);
+        do
+            next();
+        while(!isTarget(this._current.getPos()));
         
-        while(!isEmpty()) {
-            current = remove();
-            
-            ArrayList<Path> nodes = getNodes(current);
-            for(Path path : nodes) {
-                if(!_memo.contains(path.getPos()) && !isBlocked(path.getPos())) 
-                {
-                    _memo.add(path.getPos());
-                    add(path);
-                }
-            }
-            
-            if(isTarget(current.getPos()))
-                break;
+        return this._current;
+    }
+    
+    public Position next() {
+        if(!_memo.contains(this._current.getPos())){
+            this._memo.add(_current.getPos());
+            this.add(_current);
         }
         
-        return current;
+        this._current = remove();
+        ArrayList<Path> nodes = getNodes(this._current);
+        for(Path path : nodes) {
+            if(!_memo.contains(path.getPos()) && !isBlocked(path.getPos())) 
+            {
+                _memo.add(path.getPos());
+                add(path);
+            }
+        }
+        
+        
+        return this._current.getPos();
     }
+
+    public Path getCurrent() {
+        return _current;
+    }
+    
+    
 }

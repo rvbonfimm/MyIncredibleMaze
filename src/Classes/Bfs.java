@@ -24,6 +24,13 @@ public class Bfs extends Search{
         _queue = new LinkedList<Path>();
     }
 
+    public Bfs(Board board, Position begin, Position target) {
+        super(board, begin, target);
+        _queue = new LinkedList<Path>();
+    }
+
+    
+    
     @Override
     public Path remove() {
         return _queue.poll();

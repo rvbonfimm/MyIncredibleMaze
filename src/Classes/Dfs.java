@@ -1,6 +1,5 @@
 package Classes;
 
-import java.util.HashSet;
 import java.util.Stack;
 
 public class Dfs extends Search{
@@ -12,6 +11,12 @@ public class Dfs extends Search{
         _stack = new Stack<>();
     }
 
+    public Dfs(Board board, Position begin, Position target) {
+        super(board, begin, target);
+        _stack = new Stack<>();
+    }
+    
+    
     @Override
     public Path remove() {
         return _stack.pop();
@@ -26,8 +31,5 @@ public class Dfs extends Search{
     public boolean isEmpty() {
         return _stack.size() == 0;
     }
-
-    
-  
     
 }

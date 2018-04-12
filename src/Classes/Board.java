@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Classes;
 
 import java.util.HashSet;
@@ -19,7 +14,6 @@ public class Board {
     public static final char END     =    'E';
     public static final char BLOCKED =    '#';
     public static final char PATH    =    'x';
-    
     
     private final byte _size;
     private Classes.Position _begin;
@@ -115,16 +109,26 @@ public class Board {
     
     public static void main(String[] args){
 
-        Board board = new Board((byte)20, (byte) 10);
+        
+        Board board = new Board((byte)127, (byte) 10);
+        
+        Search s = new Dfs(board, new Position((byte) 0, (byte) 0), new Position((byte) 126, (byte) 126));
+        
+   
 
-        Search s = new Dfs(board);
+        Position p = null;
+        int ct = 0;
+        do
+        {
+            p = s.next();
+            
+            //board.set(p.getRow(), p.getColumn(), PATH);
+           // System.out.println("" + board);
+            ct++;
+        }
+        while(!s.isTarget(p));
+        board.set(s.getCurrent());
         
-        Path p = s.run();
-        board.set(p);
-        
-        System.out.println(board);
-        
-        
-        
+        System.out.println("" + board + " " + ct);
     }   
 }
