@@ -117,14 +117,19 @@ public class Board {
 
         Board board = new Board((byte)20, (byte) 10);
 
-        Search s = new Dfs(board);
+       // Search s = new Dfs(board);
         
-        Path p = s.run();
-        board.set(p);
+        //Path p = s.run();
+        //board.set(p);
         
+       
+        
+        Search s2 = new OutraBusca(board);
+        //s2.remove();
+        
+        Path r = s2.run();
+        board.set(r);
+       
         System.out.println(board);
-        
-        
-        
     }   
 }
