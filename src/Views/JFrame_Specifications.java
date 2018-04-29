@@ -5,9 +5,10 @@
  */
 package Views;
 
-import Classes.Maze;
+
 import java.util.Random;
 import javax.swing.JOptionPane;
+import Classes.Debugger;
 
 public class JFrame_Specifications extends javax.swing.JFrame {
 
@@ -239,9 +240,9 @@ public class JFrame_Specifications extends javax.swing.JFrame {
 
         String method_chosen = this.jComboBox_Methods.getSelectedItem().toString();
 
-        Classes.Debugger.debug(0, "Axis X: " + axis_x);
-        Classes.Debugger.debug(0, "Random number: " + barrier_percentage);
-        Classes.Debugger.debug(0, "Method chosen: " + method_chosen);
+        Debugger.debug(0, "Axis X: " + axis_x);
+        Debugger.debug(0, "Random number: " + barrier_percentage);
+        Debugger.debug(0, "Method chosen: " + method_chosen);
 
         Maze new_maze = new Maze(axis_x, axis_x, method_chosen, barrier_percentage);
     }//GEN-LAST:event_jButton_Start_MazeActionPerformed
