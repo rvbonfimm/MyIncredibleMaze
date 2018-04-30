@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Classes;
+package Search;
 
-import java.util.ArrayDeque;
-import java.util.HashSet;
 import java.util.LinkedList;
-
 import java.util.Queue;
+import Classes.Board;
+import Classes.Node;
 
 /**
  *
@@ -17,24 +16,27 @@ import java.util.Queue;
  */
 public class Bfs extends Search{
 
-    private Queue<Path> _queue;
+    private Queue<Node> _queue;
     
     public Bfs(Board board) {
         super(board);
-        _queue = new LinkedList<Path>();
+        _queue = new LinkedList<>();
     }
 
     @Override
-    public Path remove() {
+    public Node remove() {
         return _queue.poll();
     }
 
 
     @Override
-    public void add(Path path) {
-        _queue.add(path);
+    public void add(Node current, Node parent) {
+        if(current.isEmpty() && !current.isVisited()) {
+            current.markAsVisited();
+            current.setParent(parent);
+            _queue.add(current);
+        }
     }
-
     @Override
     public boolean isEmpty() {
         return _queue.size() == 0;
