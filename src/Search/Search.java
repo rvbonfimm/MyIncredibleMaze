@@ -15,6 +15,8 @@ import Classes.Node;
  */
 public abstract class Search {
     
+    public class NoSuchPathException extends Exception{}
+    
     private Node  _begin;
     private Node  _target;
     private Node  _current;
@@ -24,28 +26,47 @@ public abstract class Search {
     public Search(Board board) {
         this._board     = board;
         this._begin     = board.getBegin();
-        this._target    = board.getEnd();
-        
+        this._target    = board.getEnd();   
+    }
+
+    public Node getBegin() {
+        return _begin;
+    }
+
+    public Node getTarget() {
+        return _target;
+    }
+
+    public void setBegin(Node _begin) {
+        this._begin = _begin;
+    }
+
+    public void setTarget(Node _target) {
+        this._target = _target;
     }
     
     public abstract boolean isEmpty();
     public abstract Node remove();
     public abstract void add(Node current, Node parent);
     
-    public Node run() { 
+    @SuppressWarnings("empty-statement")
+    public Node run() throws NoSuchPathException{ 
         add(_begin, null);
+        while(!isEmpty() && next());
         
-        while(!isEmpty()) {
-            _current = remove();
-           
-            ArrayList<Node> nodes = _current.getAdjList();
-            for(Node node : nodes) {
-                add(node, _current);
-                if(node.equals(_target))
-                    return node;
-            }
-        }
+        if(_current == null || !_current.equals(_target))
+            throw new NoSuchPathException();
         
-        return null;
+        return _current;
+    }
+    
+    public boolean next() {
+        _current = remove();
+        if(_current.equals(_target))
+            return false;
+        ArrayList<Node> nodes = _current.getAdjList();
+        for(Node node : nodes)
+            add(node, _current);
+        return true;
     }
 }
