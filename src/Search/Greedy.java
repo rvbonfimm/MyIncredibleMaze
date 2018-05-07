@@ -5,31 +5,39 @@
  */
 package Search;
 
-import java.util.Stack;
 import Classes.Board;
 import Classes.Node;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  *
  * @author EngComp
  */
-public class Dfs extends Search{
+public class Greedy extends Search{
 
-    private Stack<Node> _stack;
+    private PriorityQueue<Node> _pq;
     
-    public Dfs(Board board) {
+    public Greedy(Board board) {
         super(board);
-        _stack = new Stack<>();
+        
+        _pq = new PriorityQueue<>(new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+                return o1.getCost() - o2.getCost();
+            }
+        });
+        
     }
 
     @Override
     public boolean isEmpty() {
-        return _stack.isEmpty();
+        return _pq.isEmpty();
     }
 
     @Override
     public Node remove() {
-        return _stack.pop();
+        return _pq.poll();
     }
 
     @Override
@@ -37,7 +45,8 @@ public class Dfs extends Search{
         if(current.isEmpty() && !current.isVisited()) {
             current.markAsVisited();
             current.setParent(parent);
-            _stack.push(current);
+            _pq.add(current);
         }
     }
+   
 }

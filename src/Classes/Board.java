@@ -1,20 +1,18 @@
 package Classes;
 
 import java.util.Random;
-import java.util.Stack;
+
 
 /**
  *
  * @author EngComp
  */
 public class Board {
-    
+       
     private Node[][] _board;
     private Node _begin;
     private Node _end;
-    
-    private Stack<Node> _path;
-    
+  
     private int _size;
     
     public Board(int size) {
@@ -72,27 +70,22 @@ public class Board {
         return _end;
     }
     
-    public void set(Node path) {
-        setPath(path);
-        Node c = next();
-        do{
-            this._board[c.getRow()][c.getCol()].markAsPath();
-        }while((c = next()) != null);
-        
-    }
-    
-    public void setPath(Node path){
-        _path = new Stack<>();
-        while(path.getParent() != null){
-            _path.push(path);
-            path = path.getParent();
+    public void set(int row, int col, int type) {
+        switch(type) {
+            case Node.PATH : this._board[row][col].markAsPath(); break;
+            case Node.EMPTY : this._board[row][col].markAsEmpty();break;
+            default: this._board[row][col].markAsBloked();
         }
     }
     
-    public Node next(){
-        if(_path.empty())
-            return null;
-        return _path.pop();
+    public void set(Node path) {
+        
+        while(path.getParent() != null) {
+            this._board[path.getRow()][path.getCol()].markAsPath();
+            path = path.getParent();
+        }
+        
+        
     }
     
     @Override
@@ -107,5 +100,4 @@ public class Board {
         return sb.toString();
     }
     
-
 }

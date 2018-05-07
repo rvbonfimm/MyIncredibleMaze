@@ -1,9 +1,8 @@
 package Classes;
 
-import Search.Bfs;
+import Search.Greedy;
 import Search.Search;
 import java.util.ArrayList;
-
 /**
  *
  * @author EngComp
@@ -21,11 +20,13 @@ public class Node {
     private Board   _board;
     private Node    _parent;
     private boolean _visited;
-
+    private int     _cost;
+    
     public Node(int row, int col, Board b) {
         this._row = row;
         this._col = col;
         this._board = b;
+        this._cost  = 0;
         this._visited = false;
         this._parent = null;
     }
@@ -36,6 +37,14 @@ public class Node {
 
     public void markAsVisited() {
         this._visited = true;
+    }
+
+    public int getCost() {
+        return _cost;
+    }
+
+    public void setCost(int _cost) {
+        this._cost += _cost;
     }
 
     public Node getDown() {
@@ -131,47 +140,20 @@ public class Node {
     }
 
     public static void main(String[] args) {
-        Board b = new Board(100, 8);
+        Board b = new Board(5, 8);
+        Heuristic h = new Heuristic(b).manhattan();
         
-        /*
-        Node begin = b.getBegin();
-        Node target = b.getEnd();
-
-        Queue<Node> fila = new LinkedList<>();
-        fila.add(begin);
-        begin.markAsVisited();
-
-        Node curr = null;
-        while (!fila.isEmpty()) {
-            curr = fila.remove();
+        System.out.println(h);
+    
+        Search s = new Greedy(b);
+        Node path;
+        try {
+            path = s.run();
+            b.set(path);
+        } catch (Search.NoSuchPathException ex) {
             
-            if (curr.equals(target)) {
-                break;
-            }
-            
-            ArrayList<Node> adj = curr.getAdjList();
-            for(Node node : adj) {
-                if(!node.isVisited() && node.isEmpty()) {
-                    fila.add(node);
-                    node.markAsVisited();
-                    node.setParent(curr);
-                }
-            }        
         }
         
-        b.setPath(curr);
-                */
-        Search s = new Bfs(b);
-        Node path = s.run();
-        b.set(path);
-        /*
-        try{    
-            Node n = b.next();
-            do{
-                System.out.println("" + n.getCol() + " " + n.getRow());
-            }while((n = b.next()) != null);
-        }catch(EmptyStackException e){}   
-         */
         System.out.println("" + b);
     }
     
