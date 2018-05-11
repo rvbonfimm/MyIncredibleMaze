@@ -10,47 +10,42 @@ package Classes;
  * @author EngComp
  */
 public class Heuristic {
-    private Board _board;
-    
-    public Heuristic(Board b){
-        this._board = b;
-    }
-    
-    public Heuristic row(){
-        int cost = _board.getSize() - 1;
-        for(int i = 0; i < _board.getSize(); i++) {
-            for(int j = 0; j < _board.getSize(); j++) {
-                _board.get(i, j).setCost(cost);
+   
+    public static void row(Board board){
+        int cost = board.getSize() - 1;
+        for(int i = 0; i < board.getSize(); i++) {
+            for(int j = 0; j < board.getSize(); j++) {
+                Node node = board.get(i, j);
+                node.setCost(node.getCost() + cost);
                 //System.out.println("" + cost);
             }
             cost--;
         }
-        return this;
     }
     
     
-    public Heuristic col(){
-        int cost = _board.getSize() - 1;
-        for(int i = 0; i < _board.getSize(); i++) {
-            for(int j = 0; j < _board.getSize(); j++) {
-                _board.get(j, i).setCost(cost);
+    public static void col(Board board){
+        int cost = board.getSize() - 1;
+        for(int i = 0; i < board.getSize(); i++) {
+            for(int j = 0; j < board.getSize(); j++) {
+                Node node = board.get(j, i);
+                node.setCost(node.getCost() + cost);
                 //System.out.println("" + cost);
             }
             cost--;
         }
-        return this;
     }
     
-    public Heuristic manhattan(){
-        return col().row();
+    public static void manhattan(Board board){
+        Heuristic.col(board);
+        Heuristic.row(board);
     }
     
-    @Override
-    public String toString() {
+    public static String out(Board board) {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < _board.getSize(); i++) {
-            for(int j = 0; j < _board.getSize(); j++) {
-                sb.append(_board.get(i, j).getCost());
+        for(int i = 0; i < board.getSize(); i++) {
+            for(int j = 0; j < board.getSize(); j++) {
+                sb.append(board.get(i, j).getCost());
             }
             sb.append("\n");
         }
