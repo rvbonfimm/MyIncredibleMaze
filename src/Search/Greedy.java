@@ -27,7 +27,7 @@ public class Greedy extends Search{
                 return o1.getCost() - o2.getCost();
             }
         });
-        
+       
     }
 
     @Override
