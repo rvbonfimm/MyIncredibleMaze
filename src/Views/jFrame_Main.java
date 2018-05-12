@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 public class jFrame_Main extends javax.swing.JFrame {
 
     public jFrame_Main() {
-        setContentPane(new JLabel(new ImageIcon("Assets/labirinto.jpg")));
+        setContentPane(new JLabel(new ImageIcon("assets/Maze_Main.jpg")));
         initComponents();
     }
 
