@@ -76,6 +76,7 @@ public class Robo {
             while(robo.isWalk())
                 robo.next();
         }catch(Exception e) {}
+        
         System.out.println("" + b);
     }
 }

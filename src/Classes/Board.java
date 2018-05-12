@@ -55,6 +55,8 @@ public class Board {
     }
     
     public Node get(int row, int col) {
+        if(row >= _size || col >= _size)
+            return null;
         return this._board[row][col];
     }
 
@@ -71,6 +73,8 @@ public class Board {
     }
     
     public void set(int row, int col, int type) {
+        if(row >= _size || col >= _size)
+            return;
         switch(type) {
             case Node.PATH : this._board[row][col].markAsPath(); break;
             case Node.EMPTY : this._board[row][col].markAsEmpty();break;
@@ -78,14 +82,20 @@ public class Board {
         }
     }
     
+    /**
+     * Recebe um Node após a realizacao de uma busca por uma das classes <br>
+     * concretas de Search.
+     * @param path 
+     */
     public void set(Node path) {
-        
+        if(path == null)
+            return;
         while(path.getParent() != null) {
             this._board[path.getRow()][path.getCol()].markAsPath();
-            path = path.getParent();
-        }
-        
-        
+           // System.out.print(""+path.getRow());
+           // System.out.println(""+path.getCol());
+            path = path.getParent(); 
+        }   
     }
     
     @Override

@@ -1,8 +1,7 @@
 package Classes;
 
-import Search.Greedy;
-import Search.Search;
 import java.util.ArrayList;
+
 /**
  *
  * @author EngComp
@@ -22,11 +21,12 @@ public class Node {
     private boolean _visited;
     private int     _cost;
     
+    
     public Node(int row, int col, Board b) {
         this._row = row;
         this._col = col;
         this._board = b;
-        this._cost  = 0;
+        this._cost  = 0; 
         this._visited = false;
         this._parent = null;
     }
@@ -44,7 +44,7 @@ public class Node {
     }
 
     public void setCost(int _cost) {
-        this._cost += _cost;
+        this._cost = _cost;
     }
 
     public Node getDown() {
@@ -99,9 +99,14 @@ public class Node {
         return _type;
     }
     
+    /**
+     * @return ArrayList<Node> todos os vizinhos deste nó
+     */
     public ArrayList<Node> getAdjList() {
         Node u, d, r, l;
-        ArrayList<Node> ls = new ArrayList<>();
+        ArrayList<Node> ls;
+        
+        ls = new ArrayList<>();
         
         u = getUp();
         d = getDown();
@@ -139,22 +144,4 @@ public class Node {
         return other._row == this._row && other._col == this._col;
     }
 
-    public static void main(String[] args) {
-        Board b = new Board(5, 8);
-        Heuristic h = new Heuristic(b).manhattan();
-        
-        System.out.println(h);
-    
-        Search s = new Greedy(b);
-        Node path;
-        try {
-            path = s.run();
-            b.set(path);
-        } catch (Search.NoSuchPathException ex) {
-            
-        }
-        
-        System.out.println("" + b);
-    }
-    
 }
