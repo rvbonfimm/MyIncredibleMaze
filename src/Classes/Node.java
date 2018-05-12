@@ -1,12 +1,7 @@
 package Classes;
 
-import Search.Bfs;
-import Search.Dfs;
-import Search.Search;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
+
 /**
  *
  * @author EngComp
@@ -149,10 +144,4 @@ public class Node {
         return other._row == this._row && other._col == this._col;
     }
 
-    public static void main(String[] args) {
-        Board b = new Board(2);
-        
-        
-    }
-    
 }

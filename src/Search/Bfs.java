@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import Classes.Board;
 import Classes.Node;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -22,8 +24,7 @@ public class Bfs extends Search{
     public Node remove() {
         return _queue.poll();
     }
-
-
+    
     @Override
     public void add(Node current, Node parent) {
         if(current.isEmpty() && !current.isVisited()) {
@@ -37,4 +38,17 @@ public class Bfs extends Search{
         return _queue.size() == 0;
     }
     
+    public static void main(String[] args) {
+        Board b = new Board(40, 8);
+        Search dfs = new Bfs(b);
+        
+        try {
+            Node path = dfs.run();
+            b.set(path);
+        } catch (NoSuchPathException ex) {
+            Logger.getLogger(Dfs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("" + b);
+        
+    }
 }

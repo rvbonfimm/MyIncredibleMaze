@@ -92,8 +92,9 @@ public class Board {
             return;
         while(path.getParent() != null) {
             this._board[path.getRow()][path.getCol()].markAsPath();
-            path = path.getParent();
-           // System.out.println("..");
+           // System.out.print(""+path.getRow());
+           // System.out.println(""+path.getCol());
+            path = path.getParent(); 
         }   
     }
     
