@@ -20,13 +20,14 @@ public class Node {
     private Node    _parent;
     private boolean _visited;
     private int     _cost;
-    
+    private int     _fcost;
     
     public Node(int row, int col, Board b) {
         this._row = row;
         this._col = col;
         this._board = b;
-        this._cost  = 0; 
+        this._cost  = 0;
+        this._fcost = 0;
         this._visited = false;
         this._parent = null;
     }
@@ -39,6 +40,16 @@ public class Node {
         this._visited = true;
     }
 
+    public int getFcost() {
+        return _fcost;
+    }
+
+    public void setFcost(int _fcost) {
+        this._fcost = _fcost;
+    }
+
+    
+    
     public int getCost() {
         return _cost;
     }

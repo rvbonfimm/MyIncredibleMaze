@@ -71,6 +71,14 @@ public class Board {
     public Node getEnd() {
         return _end;
     }
+
+    public void setBegin(Node _begin) {
+        this._begin = _begin;
+    }
+
+    public void setEnd(Node _end) {
+        this._end = _end;
+    }
     
     public void set(int row, int col, int type) {
         if(row >= _size || col >= _size)
