@@ -1,16 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Classes;
 
-/**
- *
- * @author EngComp
- */
 public class Heuristic {
-   
     public static void row(Board board){
         int cost = 0;
         for(int i = board.getEnd().getRow(); i >= 0; i--) {
@@ -29,8 +19,6 @@ public class Heuristic {
             cost++;
         }
     }
-    
-    
     public static void col(Board board){
         int cost = 0;
         for(int i = board.getEnd().getCol(); i >= 0; i--) {
@@ -50,20 +38,21 @@ public class Heuristic {
         }
         
     }
-    
-    public static void manhattan(Board board){
+
+    public static void manhattan(Board board) {
         Heuristic.col(board);
         Heuristic.row(board);
     }
-    
+
     public static String out(Board board) {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < board.getSize(); i++) {
-            for(int j = 0; j < board.getSize(); j++) {
+        for (int i = 0; i < board.getSize(); i++) {
+            for (int j = 0; j < board.getSize(); j++) {
                 sb.append(board.get(i, j).getCost());
             }
             sb.append("\n");
         }
+
         return sb.toString();
     }
     

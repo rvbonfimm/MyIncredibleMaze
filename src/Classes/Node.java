@@ -2,26 +2,23 @@ package Classes;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author EngComp
- */
 public class Node {
 
-    public static final char EMPTY      = '*';
-    public static final char BLOCKED    = '#';
-    public static final char PATH       = 'x';
-    public static final char BEGIN      = 'B';
-    public static final char END        = 'E';
-    
-    private char    _type = EMPTY;
-    private int     _row, _col;
-    private Board   _board;
-    private Node    _parent;
+    public static final char EMPTY = '*';
+    public static final char BLOCKED = '#';
+    public static final char PATH = 'x';
+    public static final char BEGIN = 'B';
+    public static final char END = 'E';
+
+    private char _type = EMPTY;
+    private int _row, _col;
+    private Board _board;
+    private Node _parent;
     private boolean _visited;
+
     private int     _cost;
     private int     _fcost;
-    
+
     public Node(int row, int col, Board b) {
         this._row = row;
         this._col = col;
@@ -59,26 +56,34 @@ public class Node {
     }
 
     public Node getDown() {
-        if (_row + 1 >= _board.getSize())
+        if (_row + 1 >= _board.getSize()) {
             return null;
+        }
+
         return _board.get(_row + 1, _col);
     }
 
     public Node getUp() {
-        if (_row - 1 < 0)
+        if (_row - 1 < 0) {
             return null;
+        }
+
         return _board.get(_row - 1, _col);
     }
 
     public Node getRight() {
-        if (_col + 1 >= _board.getSize())
+        if (_col + 1 >= _board.getSize()) {
             return null;
+        }
+
         return _board.get(_row, _col + 1);
     }
 
     public Node getLeft() {
-        if (_col - 1 < 0)
-            return null; 
+        if (_col - 1 < 0) {
+            return null;
+        }
+
         return _board.get(_row, _col - 1);
     }
 
@@ -93,15 +98,15 @@ public class Node {
     public void markAsBloked() {
         this._type = Node.BLOCKED;
     }
-    
+
     public void markAsPath() {
         this._type = Node.PATH;
     }
-    
+
     public void markAsEmpty() {
         this._type = Node.EMPTY;
     }
-    
+
     public boolean isEmpty() {
         return this._type == Node.EMPTY || this._type == Node.BEGIN;
     }
@@ -109,27 +114,32 @@ public class Node {
     public char getType() {
         return _type;
     }
-    
-    /**
-     * @return ArrayList<Node> todos os vizinhos deste nó
-     */
+
     public ArrayList<Node> getAdjList() {
         Node u, d, r, l;
         ArrayList<Node> ls;
-        
+
         ls = new ArrayList<>();
-        
+
         u = getUp();
         d = getDown();
         r = getRight();
         l = getLeft();
-        
-        if(u != null) ls.add(u);
-        if(d != null) ls.add(d);
-        if(r != null) ls.add(r);
-        if(l != null) ls.add(l);
-        
-        return ls;   
+
+        if (u != null) {
+            ls.add(u);
+        }
+        if (d != null) {
+            ls.add(d);
+        }
+        if (r != null) {
+            ls.add(r);
+        }
+        if (l != null) {
+            ls.add(l);
+        }
+
+        return ls;
     }
 
     public void setType(char type) {
@@ -143,7 +153,7 @@ public class Node {
     public int getCol() {
         return _col;
     }
- 
+
     @Override
     public String toString() {
         return "" + this._type;// + " " + row + " " + col;
@@ -154,5 +164,4 @@ public class Node {
         Node other = (Node) obj;
         return other._row == this._row && other._col == this._col;
     }
-
 }
