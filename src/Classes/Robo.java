@@ -1,6 +1,6 @@
 package Classes;
 
-import Search.Dfs;
+import Search.*;
 import Search.Search;
 import java.util.Stack;
 
@@ -22,24 +22,80 @@ public class Robo {
         _walk = false;
         _current = null;
     }
-
-    public void searchByDFS() throws Search.NoSuchPathException {
-        if (_walk == true) {
-            return;// se esta andando entao nao é possivel buscar caminhos
+    
+    private void setPath(Node path) {
+        _path = new Stack<>();
+        while(path.getParent() != null){
+            _path.push(path);
+            path = path.getParent();
         }
-
+    }
+    
+    
+    
+    public void searchByDFS() throws Search.NoSuchPathException{
+        if(_walk == true)
+            return;// se esta andando entao nao é possivel buscar caminhos
+        
         Search s = new Dfs(_board);
         Node p = s.run();
-
-        _path = new Stack<>();
-        while (p.getParent() != null) {
-            _path.push(p);
-            p = p.getParent();
-        }
-
+        
+        setPath(p);
+        
+        next();
+     
+    }
+    
+    public void searchByAs() throws Search.NoSuchPathException{
+        if(_walk == true)
+            return;
+        
+        Heuristic.manhattan(_board);
+        Search s = new As(_board);
+        Node p = s.run();
+        
+        setPath(p);
+        
         next();
     }
-
+    public void searchByGreedy() throws Search.NoSuchPathException{
+        if(_walk == true)
+            return;
+        
+        Heuristic.manhattan(_board);
+        Search s = new Greedy(_board);
+        Node p = s.run();
+        
+        setPath(p);
+        
+        next();
+    }
+    
+    
+    public void searchByBfs() throws Search.NoSuchPathException{
+        if(_walk == true)
+            return;
+        
+        Search s = new Bfs(_board);
+        Node p = s.run();
+        
+        setPath(p);
+        
+        next();
+    }
+    
+    public void searchByBidir() throws Search.NoSuchPathException{
+        if(_walk == true)
+            return;
+        
+        Search s = new BidirecionalBfs(_board);
+        Node p = s.run();
+        
+        setPath(p);
+        
+        next();
+    }
+    
     public boolean isWalk() {
         return _walk;
     }
@@ -64,17 +120,18 @@ public class Robo {
         _board.set(_current.getRow(), _current.getCol(), Node.PATH);
     }
 
-//    public static void main(String[] args) {
-//        Board b = new Board(10, 5);
-//        Robo robo = new Robo(b);
-//        try {
-//            robo.searchByDFS();
-//            while (robo.isWalk()) {
-//                robo.next();
-//            }
-//        } catch (Exception e) {
-//        }
-//
-//        System.out.println("" + b);
-//    }
+    
+    public static void main(String[] args){
+        Board b = new Board(10);
+        
+        Robo robo = new Robo(b);
+        try {
+            robo.searchByDFS();
+            while(robo.isWalk())
+                robo.next();
+        }catch(Exception e) {}
+        
+        System.out.println("" + b);
+    }
+
 }

@@ -58,9 +58,10 @@ public class BidirecionalBfs extends Search {
         if (current_b.equals(target_b)) {
             return false;
         }
-        for (Node a : current_a.getAdjList()) {
-            if (a.isEmpty() && !dc_a.contains(a)) {
-                if (a.getParent() == null) {
+        
+        for(Node a : current_a.getAdjList()) {
+            if(a.isEmpty() && !dc_a.contains(a)) {
+                if(a.getParent() == null) {
                     a.setParent(current_a);
                 } else {
                     if (dc_b.contains(a)) {
@@ -143,6 +144,7 @@ public class BidirecionalBfs extends Search {
             current_b = current_b.getParent();
         }
 
+        q.add(current_b);
         Node ret = q.remove();
         ret.setParent(current_a);
         while (!q.isEmpty()) {
@@ -153,17 +155,19 @@ public class BidirecionalBfs extends Search {
         return ret;
     }
 
-//    public static void main(String[] args) {
-//        Board board = new Board(100, 10);
-//        BidirecionalBfs bd = new BidirecionalBfs(board);
-//        Node path;
-//        try {
-//            path = bd.run();
-//            board.set(path);
-//            System.out.println("" + board);
-//        } catch (NoSuchPathException ex) {
-//
-//        }
-//        System.out.println("" + board);
-//    }
+
+    public static void main(String[] args) {
+        Board board = new Board(10);
+        BidirecionalBfs bd = new BidirecionalBfs(board);
+        Node path;
+        try {
+            path = bd.run();
+            board.set(path);
+            System.out.println("" + board);
+        } catch (NoSuchPathException ex) {
+            
+        }
+        System.out.println("" + board);
+    }
+    
 }

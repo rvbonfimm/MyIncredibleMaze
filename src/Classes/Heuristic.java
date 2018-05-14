@@ -1,29 +1,42 @@
 package Classes;
 
 public class Heuristic {
-
-    public static void row(Board board) {
-        int cost = board.getSize() - 1;
-        for (int i = 0; i < board.getSize(); i++) {
-            for (int j = 0; j < board.getSize(); j++) {
+    public static void row(Board board){
+        int cost = 0;
+        for(int i = board.getEnd().getRow(); i >= 0; i--) {
+            for(int j = 0; j < board.getSize(); j++) {
                 Node node = board.get(i, j);
                 node.setCost(node.getCost() + cost);
-                //System.out.println("" + cost);
             }
-            cost--;
+            cost++;
+        }
+        cost = 1;
+        for(int i = board.getEnd().getRow() + 1; i < board.getSize(); i++) {
+            for(int j = 0; j < board.getSize(); j++) {
+                Node node = board.get(i, j);
+                node.setCost(node.getCost() + cost);
+            }
+            cost++;
         }
     }
-
-    public static void col(Board board) {
-        int cost = board.getSize() - 1;
-        for (int i = 0; i < board.getSize(); i++) {
-            for (int j = 0; j < board.getSize(); j++) {
+    public static void col(Board board){
+        int cost = 0;
+        for(int i = board.getEnd().getCol(); i >= 0; i--) {
+            for(int j = 0; j < board.getSize(); j++) {
                 Node node = board.get(j, i);
                 node.setCost(node.getCost() + cost);
-                //System.out.println("" + cost);
             }
-            cost--;
+            cost++;
         }
+        cost = 1;
+        for(int i = board.getEnd().getCol() + 1; i < board.getSize(); i++) {
+            for(int j = 0; j < board.getSize(); j++) {
+                Node node = board.get(j, i);
+                node.setCost(node.getCost() + cost);
+            }
+            cost++;
+        }
+        
     }
 
     public static void manhattan(Board board) {
@@ -42,4 +55,13 @@ public class Heuristic {
 
         return sb.toString();
     }
-}
+    
+    public static void main(String[] args) {
+        Board b = new Board(5);
+        b.setEnd(b.get(2, 4));
+        Heuristic.manhattan(b);
+        
+        System.out.println("" + out(b));
+        System.out.println("" + b);
+    }
+}   
