@@ -146,7 +146,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
                     robo.searchByGreedy();
                     break;
                 case "Custo Uniforme":
-                    System.out.println("Ainda nã está pronto.");
+                    robo.searchByCustoUniforme();
                     break;
                 case "A*":
                     robo.searchByAs();
@@ -161,6 +161,8 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
         // Center the Maze at the Maze Container jPanel
         jPanel_MazeContainer.setLayout(new GridBagLayout());
+        
+        
     }
 
     public void clearMaze() {
