@@ -48,7 +48,6 @@ public class As extends Search{
         if(parent != null)
             current.setFcost(parent.getFcost() + 1);
         current.setCost( current.getCost() + current.getFcost() );
-    
     }
     
     @Override

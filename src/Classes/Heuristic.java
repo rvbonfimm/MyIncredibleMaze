@@ -49,6 +49,7 @@ public class Heuristic {
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
                 sb.append(board.get(i, j).getCost());
+                sb.append(" | ");
             }
             sb.append("\n");
         }

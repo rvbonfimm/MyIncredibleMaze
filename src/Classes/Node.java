@@ -55,7 +55,7 @@ public class Node {
         this._cost = _cost;
     }
 
-    public Node getDown() {
+    public Node getSouth() {
         if (_row + 1 >= _board.getSize()) {
             return null;
         }
@@ -63,7 +63,7 @@ public class Node {
         return _board.get(_row + 1, _col);
     }
 
-    public Node getUp() {
+    public Node getNorth() {
         if (_row - 1 < 0) {
             return null;
         }
@@ -71,7 +71,7 @@ public class Node {
         return _board.get(_row - 1, _col);
     }
 
-    public Node getRight() {
+    public Node getEast() {
         if (_col + 1 >= _board.getSize()) {
             return null;
         }
@@ -79,14 +79,44 @@ public class Node {
         return _board.get(_row, _col + 1);
     }
 
-    public Node getLeft() {
+    public Node getWest() {
         if (_col - 1 < 0) {
             return null;
         }
 
         return _board.get(_row, _col - 1);
     }
+    
+    public Node getSe(){
+        if(_col + 1 >= _board.getSize() || _row + 1 >= _board.getSize())
+            return null;
+        
+        return _board.get(_row + 1, _col + 1);
+    }
+    
+    
+    public Node getSo(){
+        if(_col - 1 < 0 || _row + 1 >= _board.getSize())
+            return null;
+        
+        return _board.get(_row + 1, _col - 1);
+    }
+    
+    
+    public Node getNe(){
+        if(_col + 1 >= _board.getSize() || _row - 1 < 0)
+            return null;
+        
+        return _board.get(_row - 1, _col + 1);
+    }
 
+    public Node getNo(){
+        if(_col - 1 < 0 || _row - 1 < 0)
+            return null;
+        
+        return _board.get(_row - 1, _col - 1);
+    }
+    
     public Node getParent() {
         return _parent;
     }
@@ -116,16 +146,21 @@ public class Node {
     }
 
     public ArrayList<Node> getAdjList() {
-        Node u, d, r, l;
+        Node u, d, r, l, no, ne, so, se;
         ArrayList<Node> ls;
 
         ls = new ArrayList<>();
 
-        u = getUp();
-        d = getDown();
-        r = getRight();
-        l = getLeft();
+        u = getNorth();
+        d = getSouth();
+        r = getEast();
+        l = getWest();
 
+        no = getNo();
+        ne = getNe();
+        so = getSo();
+        se = getSe();
+        
         if (u != null) {
             ls.add(u);
         }
@@ -138,6 +173,15 @@ public class Node {
         if (l != null) {
             ls.add(l);
         }
+        
+        if(no != null)
+            ls.add(no);
+        if(ne != null)
+            ls.add(ne);
+        if(so != null)
+            ls.add(so);
+        if(se != null)
+            ls.add(se);
 
         return ls;
     }
@@ -163,5 +207,9 @@ public class Node {
     public boolean equals(Object obj) {
         Node other = (Node) obj;
         return other._row == this._row && other._col == this._col;
+    }
+    
+    public static void main(String[] args) {
+        
     }
 }
