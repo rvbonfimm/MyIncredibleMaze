@@ -1,13 +1,8 @@
 package Classes;
 
-/**
- *
- * @author roger
- */
 public class Debugger {
 
     public static void debug(Integer status, String message) {
-
         if (!message.equals("") && (status.equals(0) || status.equals(1) || status.equals(2))) {
 
             String str_stat = "";
