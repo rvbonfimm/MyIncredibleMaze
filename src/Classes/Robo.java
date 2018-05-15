@@ -33,7 +33,7 @@ public class Robo {
     
     
     
-    public void searchByDFS() throws Search.NoSuchPathException{
+    public void searchByDfs() throws Search.NoSuchPathException{
         if(_walk == true)
             return;// se esta andando entao nao é possivel buscar caminhos
         
@@ -126,7 +126,7 @@ public class Robo {
         
         Robo robo = new Robo(b);
         try {
-            robo.searchByDFS();
+            robo.searchByDfs();
             while(robo.isWalk())
                 robo.next();
         }catch(Exception e) {}
