@@ -86,7 +86,6 @@ public class JFrame_Maze extends javax.swing.JFrame {
         return maze;
     }
 
-    //private JComponent createMaze(int barrier_percentage, String method_chosen) {
     private void createMaze(int barrier_percentage, String method_chosen) {
         int maze_itens_quantity = dimension * dimension;
 
@@ -135,10 +134,10 @@ public class JFrame_Maze extends javax.swing.JFrame {
                     robo.searchByDfs();
                     break;
                 case "Prof. Limitada":
-                    robo.searchByDfs();
+                    System.out.println("Ainda nã está pronto.");
                     break;
                 case "Aprof. Iterativo":
-                    robo.searchByDfs();
+                    System.out.println("Ainda nã está pronto.");
                     break;
                 case "Bidirecional":
                     robo.searchByBidir();
@@ -147,7 +146,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
                     robo.searchByGreedy();
                     break;
                 case "Custo Uniforme":
-                    robo.searchByDfs();
+                    System.out.println("Ainda nã está pronto.");
                     break;
                 case "A*":
                     robo.searchByAs();
@@ -155,6 +154,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
             }
         } catch (Search.NoSuchPathException ex) {
             JOptionPane.showMessageDialog(null, "Nenhum caminho encontrado.", "Busca de caminho", JOptionPane.INFORMATION_MESSAGE);
+            clearMaze();
         }
 
         mountMazePanel();
@@ -163,13 +163,16 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jPanel_MazeContainer.setLayout(new GridBagLayout());
     }
 
-    public void mountMazePanel() {
-        JPanel actual_maze = new JPanel();
-
-        // Clear the actual maze
+    public void clearMaze() {
         this.jPanel_MazeContainer.removeAll();
         this.jPanel_MazeContainer.revalidate();
         this.jPanel_MazeContainer.repaint();
+    }
+
+    public void mountMazePanel() {
+        JPanel actual_maze = new JPanel();
+
+        clearMaze();
 
         actual_maze.setLayout(new GridLayout(dimension, dimension));
         actual_maze.setSize(dimension, dimension);
@@ -183,9 +186,6 @@ public class JFrame_Maze extends javax.swing.JFrame {
                     case Node.BEGIN:
                         icon = new ImageIcon(img_begin);
                         break;
-                    case Node.END:
-                        icon = new ImageIcon(img_dest);
-                        break;
                     case Node.BLOCKED:
                         icon = new ImageIcon(img_blockFloor);
                         break;
@@ -194,6 +194,9 @@ public class JFrame_Maze extends javax.swing.JFrame {
                         break;
                     case Node.PATH:
                         icon = new ImageIcon(img_path);
+                        break;
+                    case Node.END:
+                        icon = new ImageIcon(img_dest);
                         break;
                 }
 
@@ -280,13 +283,13 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addGap(22, 22, 22)
                 .addComponent(jComboBox_Methods, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(23, 23, 23)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField_MethodInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField_MethodInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
@@ -388,16 +391,16 @@ public class JFrame_Maze extends javax.swing.JFrame {
             jPanel_MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator3)
             .addGroup(jPanel_MainLayout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
-            .addGroup(jPanel_MainLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel_MazeContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel_MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel_MainLayout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 129, Short.MAX_VALUE))
+                    .addComponent(jPanel_MazeContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -479,9 +482,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_NextStepActionPerformed
 
     private void jMenuItem_ClearMazeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ClearMazeActionPerformed
-        jPanel_MazeContainer.removeAll();
-        jPanel_MazeContainer.revalidate();
-        jPanel_MazeContainer.repaint();
+        clearMaze();
         jPanel_MazeContainer.add(initializeMaze());
     }//GEN-LAST:event_jMenuItem_ClearMazeActionPerformed
 
@@ -539,12 +540,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
             barrier_percentage = barrier.nextInt(25);
         }
 
-        // Clear the Maze Container
-        this.jPanel_MazeContainer.removeAll();
-
-        // Update the component view
-        jPanel_MazeContainer.revalidate();
-        jPanel_MazeContainer.repaint();
+        clearMaze();
 
         // Add the new Maze
         createMaze(barrier_percentage, method_chosen);
