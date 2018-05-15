@@ -8,11 +8,8 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.util.Random;
-import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -88,13 +85,6 @@ public class JFrame_Maze extends javax.swing.JFrame {
         // Set the blocked fields quantity
         int quantity_blocked_fields = (barrier_percentage * maze_itens_quantity) / 100;
 
-        // Setting images that'll be used
-        String img_begin = "assets/Floor_Origin_" + image_pixel + ".png";
-        String img_dest = "assets/Floor_Destination_" + image_pixel + ".png";
-        String img_floor = "assets/Floor_" + floor_image + "_" + image_pixel + ".png";
-        String img_blockFloor = "assets/Barrier_" + block_image + "_" + image_pixel + ".png";
-        String img_path = "assets/Found_Field_" + image_pixel + ".png";
-        String img_notPath = "assets/Not_Found_Field_" + image_pixel + ".png";
 
         // Generate a random number between 0 and 1 to know the Origin and Destination flow
         Random mf = new Random();
@@ -133,45 +123,23 @@ public class JFrame_Maze extends javax.swing.JFrame {
             System.out.println("System Exception: " + ex);
         }
 
-        mountMazePanel(img_begin,
-                img_dest,
-                img_floor,
-                img_blockFloor,
-                img_path,
-                img_notPath);
-
-        // Center the Maze at the Maze Container jPanel
-        jPanel_MazeContainer.setLayout(new GridBagLayout());
-
-        JButton bt = new JButton(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                robo.next();
-                mountMazePanel(img_begin,
-                        img_dest,
-                        img_floor,
-                        img_blockFloor,
-                        img_path,
-                        img_notPath);
-            }
-        });
-
-        bt.setText("Next");
-
-        this.jPanel_MazeContainer.add(bt);
+        mountMazePanel();
 
         return maze;
     }
 
-    public void mountMazePanel(String img_beg,
-            String img_dest,
-            String img_floor,
-            String img_blockFloor,
-            String img_path,
-            String img_notPatch) {
+    public void mountMazePanel() {
 
         JPanel actual_maze = new JPanel();
+                // Setting images that'll be used
+        String img_begin = "assets/Floor_Origin_" + image_pixel + ".png";
+        String img_dest = "assets/Floor_Destination_" + image_pixel + ".png";
+        String img_floor = "assets/Floor_" + floor_image + "_" + image_pixel + ".png";
+        String img_blockFloor = "assets/Barrier_" + block_image + "_" + image_pixel + ".png";
+        String img_path = "assets/Found_Field_" + image_pixel + ".png";
+        String img_notPath = "assets/Not_Found_Field_" + image_pixel + ".png";
 
+        
         // Clear the actual maze
         this.jPanel_MazeContainer.removeAll();
         this.jPanel_MazeContainer.revalidate();
@@ -187,7 +155,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
                 switch (board.get(i, j).getType()) {
                     case Node.BEGIN:
-                        icon = new ImageIcon(img_beg);
+                        icon = new ImageIcon(img_begin);
                         break;
                     case Node.END:
                         icon = new ImageIcon(img_dest);
@@ -226,6 +194,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jCheckBox_Bidirectional = new javax.swing.JCheckBox();
         jPanel8 = new javax.swing.JPanel();
         jButton_Run = new javax.swing.JButton();
+        jButton_Next = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jCheckBox_Barrier_Percentage = new javax.swing.JCheckBox();
@@ -251,7 +220,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jPanel_MazeContainer.setLayout(jPanel_MazeContainerLayout);
         jPanel_MazeContainerLayout.setHorizontalGroup(
             jPanel_MazeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 387, Short.MAX_VALUE)
+            .addGap(0, 385, Short.MAX_VALUE)
         );
         jPanel_MazeContainerLayout.setVerticalGroup(
             jPanel_MazeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,13 +310,22 @@ public class JFrame_Maze extends javax.swing.JFrame {
             }
         });
 
+        jButton_Next.setText("Proximo Passo");
+        jButton_Next.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_NextActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
-                .addComponent(jButton_Run)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton_Run)
+                    .addComponent(jButton_Next, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -355,7 +333,9 @@ public class JFrame_Maze extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton_Next)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -384,7 +364,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox_Barrier_Percentage)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField_Barrier_Fields_Percentage, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+                .addComponent(jTextField_Barrier_Fields_Percentage, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                 .addGap(29, 29, 29))
         );
         jPanel1Layout.setVerticalGroup(
@@ -432,7 +412,6 @@ public class JFrame_Maze extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jMenu1.setIcon(new javax.swing.ImageIcon("C:\\Users\\roger\\Documents\\NetBeansProjects\\Merge_Maze\\maze\\assets\\settings.png")); // NOI18N
         jMenu1.setPreferredSize(new java.awt.Dimension(70, 50));
 
         jMenuItem_Close.setText("Fechar Tela");
@@ -453,7 +432,6 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setIcon(new javax.swing.ImageIcon("C:\\Users\\roger\\Documents\\NetBeansProjects\\Merge_Maze\\maze\\assets\\maze_symbol_mini.png")); // NOI18N
         jMenu2.setPreferredSize(new java.awt.Dimension(110, 50));
 
         jMenuItem_ClearMaze.setText("Limpar Labirinto");
@@ -486,7 +464,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel_Main, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -625,7 +603,13 @@ public class JFrame_Maze extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItem_ExitActionPerformed
 
+    private void jButton_NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_NextActionPerformed
+        robo.next();
+        mountMazePanel();
+    }//GEN-LAST:event_jButton_NextActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_Next;
     private javax.swing.JButton jButton_Run;
     private javax.swing.JCheckBox jCheckBox_Amplitude;
     private javax.swing.JCheckBox jCheckBox_Barrier_Percentage;

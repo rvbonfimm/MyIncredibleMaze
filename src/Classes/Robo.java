@@ -31,8 +31,6 @@ public class Robo {
         }
     }
     
-    
-    
     public void searchByDFS() throws Search.NoSuchPathException{
         if(_walk == true)
             return;// se esta andando entao nao é possivel buscar caminhos
@@ -123,7 +121,6 @@ public class Robo {
     
     public static void main(String[] args){
         Board b = new Board(10);
-        
         Robo robo = new Robo(b);
         try {
             robo.searchByDFS();

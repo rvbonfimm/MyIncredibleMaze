@@ -1,6 +1,7 @@
 package Search;
 
 import Classes.Board;
+import Classes.Heuristic;
 import Classes.Node;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -38,4 +39,22 @@ public class Greedy extends Search {
             _pq.add(current);
         }
     }
+    
+    public static void main(String[] args) {
+        Board board = new Board(4);
+        Search search = new Greedy(board);
+        
+        try{
+            Heuristic.manhattan(board);
+            System.out.println("" + Heuristic.out(board));
+            Node path = search.run();
+            board.set(path);
+            
+            System.out.println("" + Heuristic.out(board));
+            System.out.println("" + board);
+        }catch(Exception e){      
+            System.out.println("" + board);
+        }
+    }
+    
 }
