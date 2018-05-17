@@ -26,7 +26,7 @@ public class Dfs extends Search {
     }
 
     @Override
-    public void add(Node current, Node parent) {
+    public void add(Node current, Node parent) throws NoSuchPathException {
         if (current.isEmpty() && !current.isVisited()) {
             current.markAsVisited();
             current.setParent(parent);
@@ -34,17 +34,19 @@ public class Dfs extends Search {
         }
     }
 
-//    public static void main(String[] args) {
-//        Board b = new Board(400, 8);
-//        Search dfs = new Dfs(b);
-//
-//        try {
-//            Node path = dfs.run();
-//            b.set(path);
-//        } catch (NoSuchPathException ex) {
-//            Logger.getLogger(Dfs.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        System.out.println("" + b);
-//    }
+    public static void main(String[] args) {
+        int size = 200;
+        Board b = new Board(size);
+        Search dfs = new Dfs(b);
+
+        try {
+            Node path = dfs.run();
+            b.set(path);
+        } catch (NoSuchPathException ex) {
+            Logger.getLogger(Dfs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("" + b);
+        System.out.println("Quantidade de nós " + (size * size));
+    }
 }

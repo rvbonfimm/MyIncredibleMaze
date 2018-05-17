@@ -38,7 +38,19 @@ public class Heuristic {
         }
         
     }
-
+    /**
+     * Diatancia da linha e coluna de board.getEnd() para qualquer nó
+     * de Board
+     * <br>
+     *   6 | 5 | 4 | 3 | 2 |  <br>
+     *   5 | 4 | 3 | 2 | 1 |  <br>
+     *   4 | 3 | 2 | 1 | 0 |----- Board.getEnd() <br>
+     *   5 | 4 | 3 | 2 | 1 | <br>
+     *   6 | 5 | 4 | 3 | 2 | <br>
+     * <br>
+     * 
+     * @param board 
+     */
     public static void manhattan(Board board) {
         Heuristic.col(board);
         Heuristic.row(board);

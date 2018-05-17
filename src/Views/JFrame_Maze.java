@@ -3,7 +3,7 @@ package Views;
 import Classes.Board;
 import Classes.Node;
 import Classes.Robo;
-import Search.Search;
+import Search.*;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -28,7 +28,10 @@ public class JFrame_Maze extends javax.swing.JFrame {
     private Board board;
     private Robo robo;
     private JPanel maze;
+    private Search search;
 
+    private int barrierPercentage;
+    
     public JFrame_Maze(int dimension, int image_pixel, String block_image, String floor_image) {
         this.dimension = dimension;
         this.image_pixel = image_pixel;
@@ -76,15 +79,16 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
     private JComponent createMaze(int barrier_percentage) {
         maze = new JPanel();
-
+        
         int maze_itens_quantity = dimension * dimension;
 
         // Set the dimension of the Maze
         maze_map = new int[dimension][dimension];
-
+        
         // Set the blocked fields quantity
         int quantity_blocked_fields = (barrier_percentage * maze_itens_quantity) / 100;
 
+        this.barrierPercentage = barrier_percentage;
 
         // Generate a random number between 0 and 1 to know the Origin and Destination flow
         Random mf = new Random();
@@ -114,6 +118,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
         board = new Board(dimension, quantity_blocked_fields, origin_position_x, origin_position_y, destination_position_x, destination_position_y);
 
+        /*
         robo = new Robo(board);
 
         try {
@@ -122,9 +127,10 @@ public class JFrame_Maze extends javax.swing.JFrame {
         } catch (Search.NoSuchPathException ex) {
             System.out.println("System Exception: " + ex);
         }
-
+*/
         mountMazePanel();
-
+        
+        
         return maze;
     }
 
@@ -147,12 +153,12 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
         actual_maze.setLayout(new GridLayout(dimension, dimension));
         actual_maze.setSize(dimension, dimension);
-
+        
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
                 JLabel label = new JLabel();
                 ImageIcon icon = null;
-
+                
                 switch (board.get(i, j).getType()) {
                     case Node.BEGIN:
                         icon = new ImageIcon(img_begin);
@@ -472,10 +478,23 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
     private void jCheckBox_AmplitudeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_AmplitudeActionPerformed
         if (this.jCheckBox_Amplitude.isSelected()) {
+            
             this.jCheckBox_Depth.setSelected(false);
             this.jCheckBox_Limited_Depth.setSelected(false);
             this.jCheckBox_Iterative_Deepening.setSelected(false);
             this.jCheckBox_Bidirectional.setSelected(false);
+
+            createMaze(this.barrierPercentage);
+            
+            robo = new Robo(board);
+
+            try {
+                robo.searchByBfs();
+            } catch (Search.NoSuchPathException ex) {
+                JOptionPane.showMessageDialog(null, "Caminho nao encontrado", "OPS", JOptionPane.WARNING_MESSAGE);
+            }
+            mountMazePanel();
+            
         }
     }//GEN-LAST:event_jCheckBox_AmplitudeActionPerformed
 
@@ -537,7 +556,6 @@ public class JFrame_Maze extends javax.swing.JFrame {
             return;
         } else {
             String method_chosen = "";
-
             if (this.jCheckBox_Amplitude.isSelected()) {
                 method_chosen = this.jCheckBox_Amplitude.getText();
             } else if (this.jCheckBox_Depth.isSelected()) {

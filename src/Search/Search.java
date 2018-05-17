@@ -45,7 +45,7 @@ public abstract class Search {
 
     public abstract Node remove();
 
-    public abstract void add(Node current, Node parent);
+    public abstract void add(Node current, Node parent) throws NoSuchPathException;
 
     /**
      * Realiza uma busca completa
@@ -78,7 +78,7 @@ public abstract class Search {
      * @return Verdadeiro se o nó objetivo for encontrado, e falso caso
      * contrario
      */
-    public boolean next() {
+    public boolean next() throws NoSuchPathException{
 
         _current = remove();
         if (_current.equals(_target)) {

@@ -19,12 +19,15 @@ public class Node {
     private int     _cost;
     private int     _fcost;
 
+    private int _level;
+    
     public Node(int row, int col, Board b) {
         this._row = row;
         this._col = col;
         this._board = b;
         this._cost  = 0;
         this._fcost = 0;
+        this._level = 0;
         this._visited = false;
         this._parent = null;
     }
@@ -37,6 +40,11 @@ public class Node {
         this._visited = true;
     }
 
+    public void markAsNotVisited() {
+        this._visited = false;
+    }
+
+    
     public int getFcost() {
         return _fcost;
     }
@@ -44,8 +52,6 @@ public class Node {
     public void setFcost(int _fcost) {
         this._fcost = _fcost;
     }
-
-    
     
     public int getCost() {
         return _cost;
@@ -55,6 +61,16 @@ public class Node {
         this._cost = _cost;
     }
 
+    public int getLevel() {
+        return _level;
+    }
+
+    public void setLevel(int _level) {
+        this._level = _level;
+    }
+    
+    
+    
     public Node getSouth() {
         if (_row + 1 >= _board.getSize()) {
             return null;
@@ -138,14 +154,24 @@ public class Node {
     }
 
     public boolean isEmpty() {
-        return this._type == Node.EMPTY || this._type == Node.BEGIN;
+        return this._type == Node.EMPTY || this._type == Node.BEGIN || this._type == Node.END;
+    }
+    
+    public boolean isBlocked() {
+        return this._type == Node.BLOCKED;
     }
 
     public char getType() {
         return _type;
     }
-
+    /**
+     * 
+     * @return ArrayList com todos os vizinhos 
+     */
     public ArrayList<Node> getAdjList() {
+        /** 
+         * 
+         */
         Node u, d, r, l, no, ne, so, se;
         ArrayList<Node> ls;
 
