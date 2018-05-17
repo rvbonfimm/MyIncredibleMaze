@@ -2,12 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/EngComp/Desktop/ia2018/maze2/maze/src/Classes/Node.java</file>
-            <file>file:/Users/EngComp/Desktop/ia2018/maze2/maze/src/Search/IterDfs.java</file>
-            <file>file:/Users/EngComp/Desktop/ia2018/maze2/maze/src/Search/Bfs.java</file>
-            <file>file:/Users/EngComp/Desktop/ia2018/maze2/maze/src/Search/LimDfs.java</file>
-            <file>file:/Users/EngComp/Desktop/ia2018/maze2/maze/src/Classes/Board.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

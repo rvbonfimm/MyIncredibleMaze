@@ -19,35 +19,25 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
     private final int dimension;
     private int image_pixel;
-    private String block_image;
-    private String floor_image;
     private int[][] maze_map;
-
-//    private final String img_begin = "assets/Floor_Origin_" + image_pixel + ".png";
-//    private final String img_dest = "assets/Floor_Destination_" + image_pixel + ".png";
-//    private final String img_floor = "assets/Floor_" + floor_image + "_" + image_pixel + ".png";
-//    private final String img_blockFloor = "assets/Barrier_" + block_image + "_" + image_pixel + ".png";
-//    private final String img_path = "assets/Found_Field_" + image_pixel + ".png";
-//    private final String img_notPath = "assets/Not_Found_Field_" + image_pixel + ".png";
-    private final String img_begin = "assets/Floor_Origin_36.png";
-    private final String img_dest = "assets/Floor_Destination_36.png";
-    private final String img_floor = "assets/Floor_Dark_36.png";
-    private final String img_blockFloor = "assets/Barrier_Fire_36.png";
-    private final String img_path = "assets/Found_Field_36.png";
-    private final String img_notPath = "assets/Not_Found_Field_36.png";
 
     private Board board;
     private Robo robo;
 
-    public JFrame_Maze(int dimension, int image_pixel, String block_image, String floor_image) {
+    public JFrame_Maze(int dimension, int image_pixel) {
         this.dimension = dimension;
         this.image_pixel = image_pixel;
-        this.block_image = block_image;
-        this.floor_image = floor_image;
 
         initComponents();
 
+        ImageIcon settings = new ImageIcon("assets/settings.png");
+        ImageIcon options = new ImageIcon("assets/maze_symbol_mini.png");
+
+        this.jMenu_Settings.setIcon(settings);
+        this.jMenu_Options.setIcon(options);
+
         this.jTextField_MethodInput.setEnabled(false);
+        this.jButton_NextStep.setEnabled(false);
 
         // Initialize the Maze (Only basic floor)
         this.jPanel_MazeContainer.add(initializeMaze());
@@ -68,15 +58,12 @@ public class JFrame_Maze extends javax.swing.JFrame {
         maze.setLayout(new GridLayout(dimension, dimension));
         maze.setSize(dimension, dimension);
 
-        String mounted_image = "assets/Floor" + "_" + floor_image + "_" + image_pixel + ".png";
+        String mounted_image = "assets/Floor_Dark_" + image_pixel + ".png";
 
         // Set the normal and blocked fields
         for (int i = 0; i < maze_map.length; i++) {
             for (int j = 0; j < maze_map[0].length; j++) {
-                JLabel label = new JLabel();
-                ImageIcon icon = null;
-                icon = new ImageIcon(mounted_image);
-                label.setIcon(icon);
+                JLabel label = new JLabel(new ImageIcon(mounted_image));
                 maze.add(label);
             }
         }
@@ -87,6 +74,8 @@ public class JFrame_Maze extends javax.swing.JFrame {
     }
 
     private void createMaze(int barrier_percentage, String method_chosen) {
+        this.jButton_NextStep.setEnabled(true);
+
         int maze_itens_quantity = dimension * dimension;
 
         // Set the dimension of the Maze
@@ -134,10 +123,14 @@ public class JFrame_Maze extends javax.swing.JFrame {
                     robo.searchByDFS();
                     break;
                 case "Prof. Limitada":
-                    System.out.println("Ainda nã está pronto.");
+                    robo.searchByLim(Integer.parseInt(this.jTextField_MethodInput.getText()));
                     break;
                 case "Aprof. Iterativo":
-                    System.out.println("Ainda nã está pronto.");
+                    if (!this.jTextField_MethodInput.getText().equals("")) {
+                        robo.searchByIter(Integer.parseInt(jTextField_MethodInput.getText()));
+                    } else {
+                        robo.searchByIter();
+                    }
                     break;
                 case "Bidirecional":
                     robo.searchByBidir();
@@ -161,8 +154,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
         // Center the Maze at the Maze Container jPanel
         jPanel_MazeContainer.setLayout(new GridBagLayout());
-        
-        
+
     }
 
     public void clearMaze() {
@@ -173,6 +165,12 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
     public void mountMazePanel() {
         JPanel actual_maze = new JPanel();
+
+        String img_begin = "assets/Floor_Origin_" + image_pixel + ".png";
+        String img_dest = "assets/Floor_Destination_" + image_pixel + ".png";
+        String img_floor = "assets/Floor_Dark_" + image_pixel + ".png";
+        String img_blockFloor = "assets/Barrier_Fire_" + image_pixel + ".png";
+        String img_path = "assets/Found_Field_" + image_pixel + ".png";
 
         clearMaze();
 
@@ -229,10 +227,10 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jCheckBox_Barrier_Percentage = new javax.swing.JCheckBox();
         jTextField_Barrier_Fields_Percentage = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        jMenu_Settings = new javax.swing.JMenu();
         jMenuItem_Close = new javax.swing.JMenuItem();
         jMenuItem_Exit = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenu_Options = new javax.swing.JMenu();
         jMenuItem_ClearMaze = new javax.swing.JMenuItem();
         jMenuItem_ResetMaze = new javax.swing.JMenuItem();
 
@@ -297,7 +295,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ações", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
 
-        jButton_NextStep.setText("Passo a Passo");
+        jButton_NextStep.setText("Avançar");
         jButton_NextStep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_NextStepActionPerformed(evt);
@@ -316,20 +314,23 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton_Run, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton_NextStep, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton_NextStep, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_Run))
                 .addGap(54, 54, 54))
         );
+
+        jPanel8Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton_NextStep, jButton_Run});
+
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jButton_NextStep, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap(13, Short.MAX_VALUE)
                 .addComponent(jButton_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton_NextStep, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -401,15 +402,12 @@ public class JFrame_Maze extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 129, Short.MAX_VALUE))
+                        .addGap(0, 132, Short.MAX_VALUE))
                     .addComponent(jPanel_MazeContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        jMenuBar1.setBackground(java.awt.Color.white);
-
-        jMenu1.setIcon(new javax.swing.ImageIcon("/home/eliseuvidaloca/Documents/Development/Java/maze/assets/settings.png")); // NOI18N
-        jMenu1.setPreferredSize(new java.awt.Dimension(70, 50));
+        jMenu_Settings.setPreferredSize(new java.awt.Dimension(70, 50));
 
         jMenuItem_Close.setText("Fechar Tela");
         jMenuItem_Close.addActionListener(new java.awt.event.ActionListener() {
@@ -417,7 +415,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
                 jMenuItem_CloseActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem_Close);
+        jMenu_Settings.add(jMenuItem_Close);
 
         jMenuItem_Exit.setText("Fechar Aplicação");
         jMenuItem_Exit.addActionListener(new java.awt.event.ActionListener() {
@@ -425,12 +423,11 @@ public class JFrame_Maze extends javax.swing.JFrame {
                 jMenuItem_ExitActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem_Exit);
+        jMenu_Settings.add(jMenuItem_Exit);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jMenu_Settings);
 
-        jMenu2.setIcon(new javax.swing.ImageIcon("/home/eliseuvidaloca/Documents/Development/Java/maze/assets/maze_symbol_mini.png")); // NOI18N
-        jMenu2.setPreferredSize(new java.awt.Dimension(110, 50));
+        jMenu_Options.setPreferredSize(new java.awt.Dimension(110, 50));
 
         jMenuItem_ClearMaze.setText("Limpar Labirinto");
         jMenuItem_ClearMaze.addActionListener(new java.awt.event.ActionListener() {
@@ -438,7 +435,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
                 jMenuItem_ClearMazeActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem_ClearMaze);
+        jMenu_Options.add(jMenuItem_ClearMaze);
 
         jMenuItem_ResetMaze.setText("Redefinir Labirinto");
         jMenuItem_ResetMaze.addActionListener(new java.awt.event.ActionListener() {
@@ -446,9 +443,9 @@ public class JFrame_Maze extends javax.swing.JFrame {
                 jMenuItem_ResetMazeActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem_ResetMaze);
+        jMenu_Options.add(jMenuItem_ResetMaze);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jMenu_Options);
 
         setJMenuBar(jMenuBar1);
 
@@ -542,6 +539,13 @@ public class JFrame_Maze extends javax.swing.JFrame {
             barrier_percentage = barrier.nextInt(25);
         }
 
+        if (this.jComboBox_Methods.getSelectedItem().equals("Prof. Limitada")
+                && this.jTextField_MethodInput.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Voce esqueceu de digitar a entrada do método.", "Entrada necessária", JOptionPane.WARNING_MESSAGE);
+            this.jTextField_MethodInput.requestFocus();
+            return;
+        }
+
         clearMaze();
 
         // Add the new Maze
@@ -555,13 +559,13 @@ public class JFrame_Maze extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox_Methods;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem_ClearMaze;
     private javax.swing.JMenuItem jMenuItem_Close;
     private javax.swing.JMenuItem jMenuItem_Exit;
     private javax.swing.JMenuItem jMenuItem_ResetMaze;
+    private javax.swing.JMenu jMenu_Options;
+    private javax.swing.JMenu jMenu_Settings;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
