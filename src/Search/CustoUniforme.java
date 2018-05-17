@@ -1,8 +1,6 @@
-
 package Search;
 
 import Classes.Board;
-import Classes.Heuristic;
 import Classes.Node;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -48,15 +46,4 @@ public class CustoUniforme extends Search{
         }
     }  
 
-    public static void main(String[] args) {
-        Board board = new Board(4);
-        System.out.println("" + Heuristic.out(board));
-        Search uni = new CustoUniforme(board);
-        try{
-            Node path = uni.run();
-            board.set(path);
-            System.out.println("" + board);
-            System.out.println("" + Heuristic.out(board));
-        }catch(Exception e){}
-    }
 }

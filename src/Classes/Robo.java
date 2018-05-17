@@ -68,6 +68,17 @@ public class Robo {
         next();
     }
     
+    public void searchByCustoUniforme() throws Search.NoSuchPathException{
+        if(_walk == true)
+            return;// se esta andando entao nao é possivel buscar caminhos
+        
+        Search s = new CustoUniforme(_board);
+        Node p = s.run();
+        
+        setPath(p);
+        next();
+     
+    }
     
     public void searchByBfs() throws Search.NoSuchPathException{
         if(_walk == true)

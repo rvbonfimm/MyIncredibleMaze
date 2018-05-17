@@ -58,11 +58,12 @@ public class BidirecionalBfs extends Search {
         if (current_b.equals(target_b)) {
             return false;
         }
-        
-        for(Node a : current_a.getAdjList()) {
-            if(a.isEmpty() && !dc_a.contains(a)) {
-                if(a.getParent() == null) {
+
+        for (Node a : current_a.getAdjList()) {
+            if (a.isEmpty() && !dc_a.contains(a)) {
+                if (a.getParent() == null) {
                     a.setParent(current_a);
+
                 } else { // verifica no dicionario de b, se existe um vizinho do nó atual
                     if (dc_b.contains(a)) {
                         for (Node k : dc_b) {
@@ -70,6 +71,7 @@ public class BidirecionalBfs extends Search {
                                 collision = true; 
                                 current_b = a;
                             }
+
                         }
                     }
                 }
@@ -84,6 +86,7 @@ public class BidirecionalBfs extends Search {
             if (b.isEmpty() && !dc_b.contains(b)) {
                 if (b.getParent() == null) {
                     b.setParent(current_b);
+
                 } else { // verifica no dicionario de a, se existe um vizinho do nó atual
                     if (dc_a.contains(b)) {
                         for (Node k : dc_a) {
@@ -91,6 +94,7 @@ public class BidirecionalBfs extends Search {
                                 collision = true;
                                 current_a = b;
                             }
+
                         }
                     }
                 }
@@ -155,19 +159,19 @@ public class BidirecionalBfs extends Search {
         return ret;
     }
 
-
     public static void main(String[] args) {
         Board board = new Board(100);
         BidirecionalBfs bd = new BidirecionalBfs(board);
         Node path;
+
         try {
             path = bd.run();
             board.set(path);
             System.out.println("" + board);
         } catch (NoSuchPathException ex) {
-            
+            System.out.println("Exception: " + ex);
         }
+
         System.out.println("" + board);
     }
-    
 }

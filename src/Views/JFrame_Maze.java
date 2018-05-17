@@ -3,7 +3,7 @@ package Views;
 import Classes.Board;
 import Classes.Node;
 import Classes.Robo;
-import Search.*;
+import Search.Search;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -18,20 +18,27 @@ import javax.swing.JPanel;
 public class JFrame_Maze extends javax.swing.JFrame {
 
     private final int dimension;
-    private final int image_pixel;
-    private final String block_image;
-    private final String floor_image;
-    private int[][] begin;
-    private int[][] end;
+    private int image_pixel;
+    private String block_image;
+    private String floor_image;
     private int[][] maze_map;
+
+//    private final String img_begin = "assets/Floor_Origin_" + image_pixel + ".png";
+//    private final String img_dest = "assets/Floor_Destination_" + image_pixel + ".png";
+//    private final String img_floor = "assets/Floor_" + floor_image + "_" + image_pixel + ".png";
+//    private final String img_blockFloor = "assets/Barrier_" + block_image + "_" + image_pixel + ".png";
+//    private final String img_path = "assets/Found_Field_" + image_pixel + ".png";
+//    private final String img_notPath = "assets/Not_Found_Field_" + image_pixel + ".png";
+    private final String img_begin = "assets/Floor_Origin_36.png";
+    private final String img_dest = "assets/Floor_Destination_36.png";
+    private final String img_floor = "assets/Floor_Dark_36.png";
+    private final String img_blockFloor = "assets/Barrier_Fire_36.png";
+    private final String img_path = "assets/Found_Field_36.png";
+    private final String img_notPath = "assets/Not_Found_Field_36.png";
 
     private Board board;
     private Robo robo;
-    private JPanel maze;
-    private Search search;
 
-    private int barrierPercentage;
-    
     public JFrame_Maze(int dimension, int image_pixel, String block_image, String floor_image) {
         this.dimension = dimension;
         this.image_pixel = image_pixel;
@@ -39,6 +46,8 @@ public class JFrame_Maze extends javax.swing.JFrame {
         this.floor_image = floor_image;
 
         initComponents();
+
+        this.jTextField_MethodInput.setEnabled(false);
 
         // Initialize the Maze (Only basic floor)
         this.jPanel_MazeContainer.add(initializeMaze());
@@ -77,18 +86,14 @@ public class JFrame_Maze extends javax.swing.JFrame {
         return maze;
     }
 
-    private JComponent createMaze(int barrier_percentage) {
-        maze = new JPanel();
-        
+    private void createMaze(int barrier_percentage, String method_chosen) {
         int maze_itens_quantity = dimension * dimension;
 
         // Set the dimension of the Maze
         maze_map = new int[dimension][dimension];
-        
+
         // Set the blocked fields quantity
         int quantity_blocked_fields = (barrier_percentage * maze_itens_quantity) / 100;
-
-        this.barrierPercentage = barrier_percentage;
 
         // Generate a random number between 0 and 1 to know the Origin and Destination flow
         Random mf = new Random();
@@ -118,53 +123,70 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
         board = new Board(dimension, quantity_blocked_fields, origin_position_x, origin_position_y, destination_position_x, destination_position_y);
 
-        /*
         robo = new Robo(board);
 
         try {
-            robo.searchByDFS();
-            //search = new Greedy(board);
+            switch (method_chosen) {
+                case "Amplitude":
+                    robo.searchByBfs();
+                    break;
+                case "Profundidade":
+                    robo.searchByDFS();
+                    break;
+                case "Prof. Limitada":
+                    System.out.println("Ainda nã está pronto.");
+                    break;
+                case "Aprof. Iterativo":
+                    System.out.println("Ainda nã está pronto.");
+                    break;
+                case "Bidirecional":
+                    robo.searchByBidir();
+                    break;
+                case "Greedy":
+                    robo.searchByGreedy();
+                    break;
+                case "Custo Uniforme":
+                    robo.searchByCustoUniforme();
+                    break;
+                case "A*":
+                    robo.searchByAs();
+                    break;
+            }
         } catch (Search.NoSuchPathException ex) {
-            System.out.println("System Exception: " + ex);
+            JOptionPane.showMessageDialog(null, "Nenhum caminho encontrado.", "Busca de caminho", JOptionPane.INFORMATION_MESSAGE);
+            clearMaze();
         }
-*/
+
         mountMazePanel();
+
+        // Center the Maze at the Maze Container jPanel
+        jPanel_MazeContainer.setLayout(new GridBagLayout());
         
         
-        return maze;
     }
 
-    public void mountMazePanel() {
-
-        JPanel actual_maze = new JPanel();
-                // Setting images that'll be used
-        String img_begin = "assets/Floor_Origin_" + image_pixel + ".png";
-        String img_dest = "assets/Floor_Destination_" + image_pixel + ".png";
-        String img_floor = "assets/Floor_" + floor_image + "_" + image_pixel + ".png";
-        String img_blockFloor = "assets/Barrier_" + block_image + "_" + image_pixel + ".png";
-        String img_path = "assets/Found_Field_" + image_pixel + ".png";
-        String img_notPath = "assets/Not_Found_Field_" + image_pixel + ".png";
-
-        
-        // Clear the actual maze
+    public void clearMaze() {
         this.jPanel_MazeContainer.removeAll();
         this.jPanel_MazeContainer.revalidate();
         this.jPanel_MazeContainer.repaint();
+    }
+
+    public void mountMazePanel() {
+        JPanel actual_maze = new JPanel();
+
+        clearMaze();
 
         actual_maze.setLayout(new GridLayout(dimension, dimension));
         actual_maze.setSize(dimension, dimension);
-        
+
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
                 JLabel label = new JLabel();
                 ImageIcon icon = null;
-                
+
                 switch (board.get(i, j).getType()) {
                     case Node.BEGIN:
                         icon = new ImageIcon(img_begin);
-                        break;
-                    case Node.END:
-                        icon = new ImageIcon(img_dest);
                         break;
                     case Node.BLOCKED:
                         icon = new ImageIcon(img_blockFloor);
@@ -174,6 +196,9 @@ public class JFrame_Maze extends javax.swing.JFrame {
                         break;
                     case Node.PATH:
                         icon = new ImageIcon(img_path);
+                        break;
+                    case Node.END:
+                        icon = new ImageIcon(img_dest);
                         break;
                 }
 
@@ -193,14 +218,12 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jPanel_MazeContainer = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        jCheckBox_Amplitude = new javax.swing.JCheckBox();
-        jCheckBox_Depth = new javax.swing.JCheckBox();
-        jCheckBox_Limited_Depth = new javax.swing.JCheckBox();
-        jCheckBox_Iterative_Deepening = new javax.swing.JCheckBox();
-        jCheckBox_Bidirectional = new javax.swing.JCheckBox();
+        jComboBox_Methods = new javax.swing.JComboBox<>();
+        jTextField_MethodInput = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
+        jButton_NextStep = new javax.swing.JButton();
         jButton_Run = new javax.swing.JButton();
-        jButton_Next = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jCheckBox_Barrier_Percentage = new javax.swing.JCheckBox();
@@ -226,7 +249,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jPanel_MazeContainer.setLayout(jPanel_MazeContainerLayout);
         jPanel_MazeContainerLayout.setHorizontalGroup(
             jPanel_MazeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 385, Short.MAX_VALUE)
+            .addGap(0, 387, Short.MAX_VALUE)
         );
         jPanel_MazeContainerLayout.setVerticalGroup(
             jPanel_MazeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,78 +259,50 @@ public class JFrame_Maze extends javax.swing.JFrame {
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Métodos", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
 
-        jCheckBox_Amplitude.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jCheckBox_Amplitude.setText("Amplitude");
-        jCheckBox_Amplitude.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox_AmplitudeActionPerformed(evt);
+        jComboBox_Methods.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecionar", "Amplitude", "Profundidade", "Prof. Limitada", "Aprof. Iterativo", "Bidirecional", "Greedy", "Custo Uniforme", "A*" }));
+        jComboBox_Methods.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox_MethodsItemStateChanged(evt);
             }
         });
 
-        jCheckBox_Depth.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jCheckBox_Depth.setText("Profundidade");
-        jCheckBox_Depth.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox_DepthActionPerformed(evt);
-            }
-        });
-
-        jCheckBox_Limited_Depth.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jCheckBox_Limited_Depth.setText("Prof. Limitada");
-        jCheckBox_Limited_Depth.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox_Limited_DepthActionPerformed(evt);
-            }
-        });
-
-        jCheckBox_Iterative_Deepening.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jCheckBox_Iterative_Deepening.setText("Aprof. Iterativo");
-        jCheckBox_Iterative_Deepening.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox_Iterative_DeepeningActionPerformed(evt);
-            }
-        });
-
-        jCheckBox_Bidirectional.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        jCheckBox_Bidirectional.setText("Bidirecional");
-        jCheckBox_Bidirectional.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox_BidirectionalActionPerformed(evt);
-            }
-        });
+        jLabel1.setText("Entrada");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox_Bidirectional)
-                    .addComponent(jCheckBox_Iterative_Deepening)
-                    .addComponent(jCheckBox_Limited_Depth)
-                    .addComponent(jCheckBox_Depth)
-                    .addComponent(jCheckBox_Amplitude))
-                .addGap(47, 47, 47))
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jComboBox_Methods, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField_MethodInput, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jCheckBox_Amplitude)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox_Depth)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox_Limited_Depth)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox_Iterative_Deepening)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox_Bidirectional)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addComponent(jComboBox_Methods, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField_MethodInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jPanel8.setBackground(new java.awt.Color(255, 255, 255));
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Ações", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 11))); // NOI18N
+
+        jButton_NextStep.setText("Passo a Passo");
+        jButton_NextStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_NextStepActionPerformed(evt);
+            }
+        });
 
         jButton_Run.setText("Rodar Labirinto");
         jButton_Run.addActionListener(new java.awt.event.ActionListener() {
@@ -316,32 +311,25 @@ public class JFrame_Maze extends javax.swing.JFrame {
             }
         });
 
-        jButton_Next.setText("Proximo Passo");
-        jButton_Next.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_NextActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton_Run)
-                    .addComponent(jButton_Next, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton_Run, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton_NextStep, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(54, 54, 54))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
+                .addComponent(jButton_NextStep, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_Next)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -370,7 +358,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCheckBox_Barrier_Percentage)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField_Barrier_Fields_Percentage, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .addComponent(jTextField_Barrier_Fields_Percentage, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
                 .addGap(29, 29, 29))
         );
         jPanel1Layout.setVerticalGroup(
@@ -405,19 +393,22 @@ public class JFrame_Maze extends javax.swing.JFrame {
             jPanel_MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator3)
             .addGroup(jPanel_MainLayout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(38, Short.MAX_VALUE))
-            .addGroup(jPanel_MainLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel_MazeContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel_MainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel_MainLayout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 129, Short.MAX_VALUE))
+                    .addComponent(jPanel_MazeContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
+        jMenuBar1.setBackground(java.awt.Color.white);
+
+        jMenu1.setIcon(new javax.swing.ImageIcon("/home/eliseuvidaloca/Documents/Development/Java/maze/assets/settings.png")); // NOI18N
         jMenu1.setPreferredSize(new java.awt.Dimension(70, 50));
 
         jMenuItem_Close.setText("Fechar Tela");
@@ -438,6 +429,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setIcon(new javax.swing.ImageIcon("/home/eliseuvidaloca/Documents/Development/Java/maze/assets/maze_symbol_mini.png")); // NOI18N
         jMenu2.setPreferredSize(new java.awt.Dimension(110, 50));
 
         jMenuItem_ClearMaze.setText("Limpar Labirinto");
@@ -469,70 +461,12 @@ public class JFrame_Maze extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel_Main, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jPanel_Main, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(3, 3, 3))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jCheckBox_AmplitudeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_AmplitudeActionPerformed
-        if (this.jCheckBox_Amplitude.isSelected()) {
-            
-            this.jCheckBox_Depth.setSelected(false);
-            this.jCheckBox_Limited_Depth.setSelected(false);
-            this.jCheckBox_Iterative_Deepening.setSelected(false);
-            this.jCheckBox_Bidirectional.setSelected(false);
-
-            createMaze(this.barrierPercentage);
-            
-            robo = new Robo(board);
-
-            try {
-                robo.searchByBfs();
-            } catch (Search.NoSuchPathException ex) {
-                JOptionPane.showMessageDialog(null, "Caminho nao encontrado", "OPS", JOptionPane.WARNING_MESSAGE);
-            }
-            mountMazePanel();
-            
-        }
-    }//GEN-LAST:event_jCheckBox_AmplitudeActionPerformed
-
-    private void jCheckBox_DepthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_DepthActionPerformed
-        if (this.jCheckBox_Depth.isSelected()) {
-            this.jCheckBox_Amplitude.setSelected(false);
-            this.jCheckBox_Limited_Depth.setSelected(false);
-            this.jCheckBox_Iterative_Deepening.setSelected(false);
-            this.jCheckBox_Bidirectional.setSelected(false);
-        }
-    }//GEN-LAST:event_jCheckBox_DepthActionPerformed
-
-    private void jCheckBox_Limited_DepthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_Limited_DepthActionPerformed
-        if (this.jCheckBox_Limited_Depth.isSelected()) {
-            this.jCheckBox_Amplitude.setSelected(false);
-            this.jCheckBox_Depth.setSelected(false);
-            this.jCheckBox_Iterative_Deepening.setSelected(false);
-            this.jCheckBox_Bidirectional.setSelected(false);
-        }
-    }//GEN-LAST:event_jCheckBox_Limited_DepthActionPerformed
-
-    private void jCheckBox_Iterative_DeepeningActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_Iterative_DeepeningActionPerformed
-        if (this.jCheckBox_Iterative_Deepening.isSelected()) {
-            this.jCheckBox_Amplitude.setSelected(false);
-            this.jCheckBox_Limited_Depth.setSelected(false);
-            this.jCheckBox_Depth.setSelected(false);
-            this.jCheckBox_Bidirectional.setSelected(false);
-        }
-    }//GEN-LAST:event_jCheckBox_Iterative_DeepeningActionPerformed
-
-    private void jCheckBox_BidirectionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_BidirectionalActionPerformed
-        if (this.jCheckBox_Bidirectional.isSelected()) {
-            this.jCheckBox_Amplitude.setSelected(false);
-            this.jCheckBox_Limited_Depth.setSelected(false);
-            this.jCheckBox_Iterative_Deepening.setSelected(false);
-            this.jCheckBox_Depth.setSelected(false);
-        }
-    }//GEN-LAST:event_jCheckBox_BidirectionalActionPerformed
 
     private void jCheckBox_Barrier_PercentageItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBox_Barrier_PercentageItemStateChanged
         if (this.jCheckBox_Barrier_Percentage.isSelected()) {
@@ -544,30 +478,47 @@ public class JFrame_Maze extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCheckBox_Barrier_PercentageItemStateChanged
 
+    private void jButton_NextStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_NextStepActionPerformed
+        robo.next();
+        mountMazePanel();
+    }//GEN-LAST:event_jButton_NextStepActionPerformed
+
+    private void jMenuItem_ClearMazeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ClearMazeActionPerformed
+        clearMaze();
+        jPanel_MazeContainer.add(initializeMaze());
+    }//GEN-LAST:event_jMenuItem_ClearMazeActionPerformed
+
+    private void jMenuItem_ResetMazeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ResetMazeActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem_ResetMazeActionPerformed
+
+    private void jMenuItem_CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CloseActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem_CloseActionPerformed
+
+    private void jMenuItem_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem_ExitActionPerformed
+
+    private void jComboBox_MethodsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_MethodsItemStateChanged
+        if (this.jComboBox_Methods.getSelectedItem().equals("Prof. Limitada")
+                || this.jComboBox_Methods.getSelectedItem().equals("Aprof. Iterativo")) {
+            this.jTextField_MethodInput.setEnabled(true);
+            this.jTextField_MethodInput.requestFocus();
+        } else {
+            this.jTextField_MethodInput.setEnabled(false);
+        }
+    }//GEN-LAST:event_jComboBox_MethodsItemStateChanged
+
     private void jButton_RunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RunActionPerformed
         // Search the method chosen
-        if (!this.jCheckBox_Amplitude.isSelected()
-                && !this.jCheckBox_Depth.isSelected()
-                && !this.jCheckBox_Limited_Depth.isSelected()
-                && !this.jCheckBox_Iterative_Deepening.isSelected()
-                && !this.jCheckBox_Bidirectional.isSelected()) {
+        if (this.jComboBox_Methods.getSelectedItem().equals("Selecionar")) {
             JOptionPane.showMessageDialog(null, "Você esqueceu de selecionar algum dos métodos para execução.", "Informações necessárias faltantes", JOptionPane.WARNING_MESSAGE);
-            this.jCheckBox_Amplitude.requestFocus();
+            this.jComboBox_Methods.requestFocus();
             return;
-        } else {
-            String method_chosen = "";
-            if (this.jCheckBox_Amplitude.isSelected()) {
-                method_chosen = this.jCheckBox_Amplitude.getText();
-            } else if (this.jCheckBox_Depth.isSelected()) {
-                method_chosen = this.jCheckBox_Depth.getText();
-            } else if (this.jCheckBox_Limited_Depth.isSelected()) {
-                method_chosen = this.jCheckBox_Limited_Depth.getText();
-            } else if (this.jCheckBox_Iterative_Deepening.isSelected()) {
-                method_chosen = this.jCheckBox_Iterative_Deepening.getText();
-            } else if (this.jCheckBox_Bidirectional.isSelected()) {
-                method_chosen = this.jCheckBox_Bidirectional.getText();
-            }
         }
+
+        String method_chosen = String.valueOf(this.jComboBox_Methods.getSelectedItem());
 
         // Check if the barrier percentage was setted
         int barrier_percentage = 0;
@@ -591,50 +542,18 @@ public class JFrame_Maze extends javax.swing.JFrame {
             barrier_percentage = barrier.nextInt(25);
         }
 
-        // Clear the Maze Container
-        this.jPanel_MazeContainer.removeAll();
-
-        // Update the component view
-        jPanel_MazeContainer.revalidate();
-        jPanel_MazeContainer.repaint();
+        clearMaze();
 
         // Add the new Maze
-        this.jPanel_MazeContainer.add(createMaze(barrier_percentage));
+        createMaze(barrier_percentage, method_chosen);
     }//GEN-LAST:event_jButton_RunActionPerformed
 
-    private void jMenuItem_ClearMazeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ClearMazeActionPerformed
-        jPanel_MazeContainer.removeAll();
-        jPanel_MazeContainer.revalidate();
-        jPanel_MazeContainer.repaint();
-        jPanel_MazeContainer.add(initializeMaze());
-    }//GEN-LAST:event_jMenuItem_ClearMazeActionPerformed
-
-    private void jMenuItem_ResetMazeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ResetMazeActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem_ResetMazeActionPerformed
-
-    private void jMenuItem_CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_CloseActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_jMenuItem_CloseActionPerformed
-
-    private void jMenuItem_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ExitActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_jMenuItem_ExitActionPerformed
-
-    private void jButton_NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_NextActionPerformed
-        robo.next();
-        mountMazePanel();
-    }//GEN-LAST:event_jButton_NextActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_Next;
+    private javax.swing.JButton jButton_NextStep;
     private javax.swing.JButton jButton_Run;
-    private javax.swing.JCheckBox jCheckBox_Amplitude;
     private javax.swing.JCheckBox jCheckBox_Barrier_Percentage;
-    private javax.swing.JCheckBox jCheckBox_Bidirectional;
-    private javax.swing.JCheckBox jCheckBox_Depth;
-    private javax.swing.JCheckBox jCheckBox_Iterative_Deepening;
-    private javax.swing.JCheckBox jCheckBox_Limited_Depth;
+    private javax.swing.JComboBox<String> jComboBox_Methods;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -650,5 +569,6 @@ public class JFrame_Maze extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel_MazeContainer;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JTextField jTextField_Barrier_Fields_Percentage;
+    private javax.swing.JTextField jTextField_MethodInput;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,8 +3,6 @@ package Search;
 import java.util.Stack;
 import Classes.Board;
 import Classes.Node;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Dfs extends Search {
 
@@ -33,7 +31,7 @@ public class Dfs extends Search {
             _stack.push(current);
         }
     }
-
+    
     public static void main(String[] args) {
         int size = 200;
         Board b = new Board(size);
@@ -43,7 +41,7 @@ public class Dfs extends Search {
             Node path = dfs.run();
             b.set(path);
         } catch (NoSuchPathException ex) {
-            Logger.getLogger(Dfs.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
 
         System.out.println("" + b);

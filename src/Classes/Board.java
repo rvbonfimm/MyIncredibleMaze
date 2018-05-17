@@ -15,7 +15,7 @@ public class Board {
     private Node _end;
 
     private int _size;
-    
+
     public Board(int size, int quantity_blocked_itens, int origin_begin, int origin_end, int dest_begin, int dest_end) {
         _size = size;
         _board = new Node[_size][_size];
@@ -55,10 +55,10 @@ public class Board {
         }
     }
 
-    public Board(int size){
-        this(size, 0, 0, 0, size - 1, size -1);
+    public Board(int size) {
+        this(size, 0, 0, 0, size - 1, size - 1);
     }
-    
+
     public Node get(int row, int col) {
         if (row >= _size || col >= _size) {
             return null;
@@ -79,7 +79,6 @@ public class Board {
         return _end;
     }
 
-
     public void setBegin(Node _begin) {
         if(this._begin != null)
             _board[this.getBegin().getRow()][this.getBegin().getCol()].setType(Node.EMPTY);
@@ -95,7 +94,7 @@ public class Board {
         
         this._end = _end;
     }
-    
+
     public void set(int row, int col, int type) {
         if (row >= _size || col >= _size) {
             return;
@@ -133,10 +132,12 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < _size; i++) {
             for (int j = 0; j < _size; j++) {
                 sb.append(_board[i][j]);
             }
+
             sb.append("\n");
         }
 
