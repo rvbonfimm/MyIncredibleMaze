@@ -67,7 +67,7 @@ public class As extends Search {
 
         try {
             Node path = dfs.run();
-            System.out.println("Custo" + path.getCost());
+            
             b.set(path);
         } catch (NoSuchPathException ex) {
             Logger.getLogger(Dfs.class.getName()).log(Level.SEVERE, null, ex);

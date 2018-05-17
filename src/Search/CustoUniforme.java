@@ -1,4 +1,3 @@
-
 package Search;
 
 import Classes.Board;
@@ -46,4 +45,5 @@ public class CustoUniforme extends Search{
             _queue.add(current);
         }
     }  
+
 }

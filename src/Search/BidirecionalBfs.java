@@ -63,11 +63,15 @@ public class BidirecionalBfs extends Search {
             if (a.isEmpty() && !dc_a.contains(a)) {
                 if (a.getParent() == null) {
                     a.setParent(current_a);
-                } else if (dc_b.contains(a)) {
-                    for (Node k : dc_b) {
-                        if (k.equals(current_b)) {
-                            collision = true;
-                            current_b = a;
+
+                } else { // verifica no dicionario de b, se existe um vizinho do nó atual
+                    if (dc_b.contains(a)) {
+                        for (Node k : dc_b) {
+                            if (k.equals(current_b)) {
+                                collision = true; 
+                                current_b = a;
+                            }
+
                         }
                     }
                 }
@@ -82,11 +86,15 @@ public class BidirecionalBfs extends Search {
             if (b.isEmpty() && !dc_b.contains(b)) {
                 if (b.getParent() == null) {
                     b.setParent(current_b);
-                } else if (dc_a.contains(b)) {
-                    for (Node k : dc_a) {
-                        if (k.equals(current_a)) {
-                            collision = true;
-                            current_a = b;
+
+                } else { // verifica no dicionario de a, se existe um vizinho do nó atual
+                    if (dc_a.contains(b)) {
+                        for (Node k : dc_a) {
+                            if (k.equals(current_a)) {
+                                collision = true;
+                                current_a = b;
+                            }
+
                         }
                     }
                 }
@@ -118,10 +126,6 @@ public class BidirecionalBfs extends Search {
 
     @SuppressWarnings("empty-statement")
     public Node run() throws NoSuchPathException {
-        /**
-         * A busca em sua forma mais geral.
-         *
-         */
 
         queue_a.add(begin_a);
         queue_b.add(begin_b);
@@ -134,6 +138,10 @@ public class BidirecionalBfs extends Search {
             throw new NoSuchPathException();
         }
 
+        
+        // Juntando os caminhos das duas buscas
+        //
+        
         Queue<Node> q = new LinkedList<>();
         while (current_b.getParent() != null) {
             q.add(current_b);
@@ -152,7 +160,7 @@ public class BidirecionalBfs extends Search {
     }
 
     public static void main(String[] args) {
-        Board board = new Board(10);
+        Board board = new Board(100);
         BidirecionalBfs bd = new BidirecionalBfs(board);
         Node path;
 

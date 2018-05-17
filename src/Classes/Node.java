@@ -6,7 +6,7 @@ public class Node {
 
     public static final char EMPTY = '*';
     public static final char BLOCKED = '#';
-    public static final char PATH = 'X';
+    public static final char PATH = 'x';
     public static final char BEGIN = 'B';
     public static final char END = 'E';
 
@@ -16,15 +16,18 @@ public class Node {
     private Node _parent;
     private boolean _visited;
 
-    private int _cost;
-    private int _fcost;
+    private int     _cost;
+    private int     _fcost;
 
+    private int _level;
+    
     public Node(int row, int col, Board b) {
         this._row = row;
         this._col = col;
         this._board = b;
-        this._cost = 0;
+        this._cost  = 0;
         this._fcost = 0;
+        this._level = 0;
         this._visited = false;
         this._parent = null;
     }
@@ -37,6 +40,11 @@ public class Node {
         this._visited = true;
     }
 
+    public void markAsNotVisited() {
+        this._visited = false;
+    }
+
+    
     public int getFcost() {
         return _fcost;
     }
@@ -44,7 +52,7 @@ public class Node {
     public void setFcost(int _fcost) {
         this._fcost = _fcost;
     }
-
+    
     public int getCost() {
         return _cost;
     }
@@ -53,6 +61,16 @@ public class Node {
         this._cost = _cost;
     }
 
+    public int getLevel() {
+        return _level;
+    }
+
+    public void setLevel(int _level) {
+        this._level = _level;
+    }
+    
+    
+    
     public Node getSouth() {
         if (_row + 1 >= _board.getSize()) {
             return null;
@@ -84,39 +102,37 @@ public class Node {
 
         return _board.get(_row, _col - 1);
     }
-
-    public Node getSe() {
-        if (_col + 1 >= _board.getSize() || _row + 1 >= _board.getSize()) {
+    
+    public Node getSe(){
+        if(_col + 1 >= _board.getSize() || _row + 1 >= _board.getSize())
             return null;
-        }
-
+        
         return _board.get(_row + 1, _col + 1);
     }
-
-    public Node getSo() {
-        if (_col - 1 < 0 || _row + 1 >= _board.getSize()) {
+    
+    
+    public Node getSo(){
+        if(_col - 1 < 0 || _row + 1 >= _board.getSize())
             return null;
-        }
-
+        
         return _board.get(_row + 1, _col - 1);
     }
-
-    public Node getNe() {
-        if (_col + 1 >= _board.getSize() || _row - 1 < 0) {
+    
+    
+    public Node getNe(){
+        if(_col + 1 >= _board.getSize() || _row - 1 < 0)
             return null;
-        }
-
+        
         return _board.get(_row - 1, _col + 1);
     }
 
-    public Node getNo() {
-        if (_col - 1 < 0 || _row - 1 < 0) {
+    public Node getNo(){
+        if(_col - 1 < 0 || _row - 1 < 0)
             return null;
-        }
-
+        
         return _board.get(_row - 1, _col - 1);
     }
-
+    
     public Node getParent() {
         return _parent;
     }
@@ -138,14 +154,24 @@ public class Node {
     }
 
     public boolean isEmpty() {
-        return this._type == Node.EMPTY || this._type == Node.BEGIN;
+        return this._type == Node.EMPTY || this._type == Node.BEGIN || this._type == Node.END;
+    }
+    
+    public boolean isBlocked() {
+        return this._type == Node.BLOCKED;
     }
 
     public char getType() {
         return _type;
     }
-
+    /**
+     * 
+     * @return ArrayList com todos os vizinhos 
+     */
     public ArrayList<Node> getAdjList() {
+        /** 
+         * 
+         */
         Node u, d, r, l, no, ne, so, se;
         ArrayList<Node> ls;
 
@@ -160,7 +186,7 @@ public class Node {
         ne = getNe();
         so = getSo();
         se = getSe();
-
+        
         if (u != null) {
             ls.add(u);
         }
@@ -173,19 +199,15 @@ public class Node {
         if (l != null) {
             ls.add(l);
         }
-
-        if (no != null) {
+        
+        if(no != null)
             ls.add(no);
-        }
-        if (ne != null) {
+        if(ne != null)
             ls.add(ne);
-        }
-        if (so != null) {
+        if(so != null)
             ls.add(so);
-        }
-        if (se != null) {
+        if(se != null)
             ls.add(se);
-        }
 
         return ls;
     }
@@ -204,12 +226,16 @@ public class Node {
 
     @Override
     public String toString() {
-        return "" + this._type;
+        return "" + this._type;// + " " + row + " " + col;
     }
 
     @Override
     public boolean equals(Object obj) {
         Node other = (Node) obj;
         return other._row == this._row && other._col == this._col;
+    }
+    
+    public static void main(String[] args) {
+        
     }
 }

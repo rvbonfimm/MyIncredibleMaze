@@ -2,6 +2,12 @@ package Classes;
 
 import java.util.Random;
 
+/**
+ * Responsavel por criar e manipular "Nós" da aplicacao <br>
+ * 
+ * * Nós sao objetos da classe Node
+ * @author EngComp
+ */
 public class Board {
 
     private Node[][] _board;
@@ -20,8 +26,8 @@ public class Board {
             }
         }
 
-        _begin = _board[origin_begin][origin_end];
-        _end = _board[dest_begin][dest_end];
+        setBegin(_board[origin_begin][origin_end]);
+        setEnd(_board[dest_begin][dest_end]);
 
         // Start to define the blocked fields with x and y random numbers
         int aux_random_number_x = 0;
@@ -74,10 +80,18 @@ public class Board {
     }
 
     public void setBegin(Node _begin) {
+        if(this._begin != null)
+            _board[this.getBegin().getRow()][this.getBegin().getCol()].setType(Node.EMPTY);
+        _board[_begin.getRow()][_begin.getCol()].setType(Node.BEGIN);
+        
         this._begin = _begin;
     }
 
     public void setEnd(Node _end) {
+        if(this._end != null)
+            _board[this.getEnd().getRow()][this.getEnd().getCol()].setType(Node.EMPTY);
+        _board[_end.getRow()][_end.getCol()].setType(Node.END);
+        
         this._end = _end;
     }
 

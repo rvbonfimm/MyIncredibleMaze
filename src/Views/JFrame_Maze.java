@@ -131,7 +131,7 @@ public class JFrame_Maze extends javax.swing.JFrame {
                     robo.searchByBfs();
                     break;
                 case "Profundidade":
-                    robo.searchByDfs();
+                    robo.searchByDFS();
                     break;
                 case "Prof. Limitada":
                     System.out.println("Ainda nã está pronto.");
